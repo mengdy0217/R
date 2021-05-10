@@ -4,3 +4,7 @@ help(package = 'xx')
 library(help = 'vcd')
 移除包
 detach("package:xx")
+
+建立数据集
+state <- data.frame(state.name,state.abb,state.area,state.division,state.region)
+> state
