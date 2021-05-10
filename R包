@@ -1,0 +1,6 @@
+install.packages()
+看xx包如何使用
+help(package = 'xx')
+library(help = 'vcd')
+移除包
+detach("package:xx")
