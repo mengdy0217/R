@@ -396,3 +396,63 @@ paste(c("Everybody","loves","stats"))
 [1] "Mary love stats"  "Linda love stats" "Poul love stats" 
 [1] 12
 
+10.时间与日期
+ts(1:26,frequency = 12,start = c(1986,10)) frequency = 12表示按月份增加（增加26个月份
+     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+1986                                       1   2   3
+1987   4   5   6   7   8   9  10  11  12  13  14  15
+1988  16  17  18  19  20  21  22  23  24  25  26    
+> ts(1:26,frequency = 1,start = c(1986,10)) frequency = 1表示按年份增加
+Time Series:
+Start = 1995 
+End = 2020 
+Frequency = 1 
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26
+
+ts函数
+data　　一个向量或者矩阵
+start　　第一个观测值的时间，为一个数字或者是一个由两个整数构成的向量
+end　　最后一个观测值的时间，指定方法和start相同
+frequency　　单位时间内观测值的频数（频率）
+deltat　　两个观测值间的时间间隔。frequency和deltat必须并且只能给定其中一个
+ts.eps　　序列之间的误差限，如果序列之间的频率差异小于ts.eps，则认为这些序列的频率相等
+class　　对象的类型。一元序列的缺省值是“ts”，多元序列的缺省值是c（“mts”,“ts”）
+names　　一个字符型向量，给出多元序列中每个一元序列的名称，缺省data中每列数据的名称或者Series 1，Series 2
+
+分别表示年 季度 月份 生成的数据格式
+ sales
+ [1] 54 52 68 74 61 88 88 77 81 78 89 55 64 79 70 64 62 87 82 53 50 63 88 87 76 87 77 90 95
+[30] 81 63 88 98 87 74 61 90 70 96 82 74 53 79 91 53 64 59 79
+> ts(sales,start = c(2010,5),end = c(2014,4),frequency = 1)
+Time Series:
+Start = 2014 
+End = 2017 
+Frequency = 1 
+[1] 54 52 68 74
+> ts(sales,start = c(2010,5),end = c(2014,4),frequency = 4)
+     Qtr1 Qtr2 Qtr3 Qtr4
+2011   54   52   68   74
+2012   61   88   88   77
+2013   81   78   89   55
+2014   64   79   70   64
+> ts(sales,start = c(2010,5),end = c(2014,4),frequency = 12)
+     Jan Feb Mar Apr May Jun Jul Aug Sep Oct Nov Dec
+2010                  54  52  68  74  61  88  88  77
+2011  81  78  89  55  64  79  70  64  62  87  82  53
+2012  50  63  88  87  76  87  77  90  95  81  63  88
+2013  98  87  74  61  90  70  96  82  74  53  79  91
+2014  53  64  59  79
+
+
+> y <- c(1:20,seq(1,12,3))  1:20是一组数字，seq(1,12,3)是接着的一组数字
+> y
+ [1]  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17 18 19 20  1  4  7 10
+x <- matrix(c(1:12,seq(1,12,3)),4,4)
+> x
+     [,1] [,2] [,3] [,4]
+[1,]    1    5    9    1
+[2,]    2    6   10    4
+[3,]    3    7   11    7
+[4,]    4    8   12   10
+
+
