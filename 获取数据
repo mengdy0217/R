@@ -1,0 +1,21 @@
+输入一个纸质表格
+ PatientID <- c(1,2,3,4)
+> AdmDate <- c("10/15/2009","11/01/2009","10/21/2009","10/28/2009")
+> Age <- c(25,34,28,52)
+> Diabetes <- c("Type1","Type2","Type1","Type1")
+> Status <- c("Poor","Inproved","Exellent","Poor")
+
+> data.frame(PatientID,AdmDate,Age,Diabetes,Status)
+  PatientID    AdmDate Age Diabetes   Status
+1         1 10/15/2009  25    Type1     Poor
+2         2 11/01/2009  34    Type2 Inproved
+3         3 10/21/2009  28    Type1 Exellent
+4         4 10/28/2009  52    Type1     Poor
+
+编辑
+data2 <- data.frame(PatientID=character(0),AdmDate=character(0),Age=numeric(),Diabetes=character(),Status=character())
+> data2 <- edit(data2) 就会弹出一个表格窗口，可以随意填写
+
+从文件读取数据
+访问数据库读取数据
+OBDC----open database connectivity
