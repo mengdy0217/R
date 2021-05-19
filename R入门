@@ -1,1 +1,5 @@
 Bioconducter包
+history(x) 输出最近x条指令
+ctrl + l 清空命令
+save.image()保存工作空间（只会保存数据和绘图函数等）
+q() 
