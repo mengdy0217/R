@@ -3,3 +3,8 @@ history(x) 输出最近x条指令
 ctrl + l 清空命令
 save.image()保存工作空间（只会保存数据和绘图函数等）
 q() 
+
+每一集都要重新设置工作空间
+setwd(dir="C:/Users/Administrator/Desktop/R_Data/")
+> getwd()
+[1] "C:/Users/Administrator/Desktop/R_Data"
