@@ -88,3 +88,111 @@ Nevada NV West 590 5149 0.5 69.03 11.5 65.2 188 109889
         "NV"          "4"        "590"       "5149"        "0.5"      "69.03"       "11.5" 
      HS.Grad        Frost         Area 
       "65.2"        "188"     "109889" 
+
+数据转换二
+取who的前50行，前50列
+who1 <- who[c(1:50),c(1:10)]
+输出后太多了，不清晰，在右上角窗口找到who2表格。在控制台里自动蹦出 View(who1)这条命令
+
+who2 <- who[c(1,3,5,8),c(2,14,16,18)]
+> View(who2)
+> who3 <- who(which(who$Continent == 7))
+Error in who(which(who$Continent == 7)) : 没有"who"这个函数
+> who3 <- who[which(who$Continent ==7)]
+> View(who3)
+> who4 <- who[which(who$CountryID >= 50 & who$CountryID <=100)]
+> View(who4)
+
+抽样sample
+sample(x,30) 无放回抽样
+ [1] 88 21 51 91 63 30 77 85 99 55 23 12 79 44 29 73 97 41  7 98  4 40  2 60 67  3 33 74
+[29] 37 84
+> sample(x,30,replace=T) 有放回抽样
+ [1]  16  84  43  45  58   2  46  48  53   2  70   2  59  31  39  13  65  40  65  30  32
+[22]  88  93  71  13  47  65  86  92 100
+
+删除固定行：采用负索引方式
+mtcars[-1:-5,] 把前五行删掉
+mtcars$mpg <- NULL 把mpg这一列都删除
+
+数据框的添加与合并
+
+cbind将两个矩阵列合并
+cbind(USArrests,state.division)
+               Murder Assault UrbanPop Rape     state.division
+Alabama          13.2     236       58 21.2 East South Central
+Alaska           10.0     263       48 44.5            Pacific
+Arizona           8.1     294       80 31.0           Mountain
+Arkansas          8.8     190       50 19.5 West South Central
+California        9.0     276       91 40.6            Pacific
+
+rbind将两个矩阵行合并
+data1 <- head(USArrests,20)
+> data2 <- tail(USArrests,20)
+> rbind(data1,data2)
+               Murder Assault UrbanPop Rape
+Alabama          13.2     236       58 21.2
+Alaska           10.0     263       48 44.5
+Arizona           8.1     294       80 31.0
+Arkansas          8.8     190       50 19.5
+California        9.0     276       91 40.6
+Colorado          7.9     204       78 38.7
+Connecticut       3.3     110       77 11.1
+Delaware          5.9     238       72 15.8
+Florida          15.4     335       80 31.9
+Georgia          17.4     211       60 25.8
+Hawaii            5.3      46       83 20.2
+Idaho             2.6     120       54 14.2
+Illinois         10.4     249       83 24.0
+Indiana           7.2     113       65 21.0
+Iowa              2.2      56       57 11.3
+Kansas            6.0     115       66 18.0
+Kentucky          9.7     109       52 16.3
+Louisiana        15.4     249       66 22.2
+Maine             2.1      83       51  7.8
+Maryland         11.3     300       67 27.8
+New Mexico       11.4     285       70 32.1
+New York         11.1     254       86 26.1
+North Carolina   13.0     337       45 16.1
+North Dakota      0.8      45       44  7.3
+Ohio              7.3     120       75 21.4
+Oklahoma          6.6     151       68 20.0
+Oregon            4.9     159       67 29.3
+Pennsylvania      6.3     106       72 14.9
+Rhode Island      3.4     174       87  8.3
+South Carolina   14.4     279       48 22.5
+South Dakota      3.8      86       45 12.8
+Tennessee        13.2     188       59 26.9
+Texas            12.7     201       80 25.5
+Utah              3.2     120       80 22.9
+Vermont           2.2      48       32 11.2
+Virginia          8.5     156       63 20.7
+Washington        4.0     145       73 26.2
+West Virginia     5.7      81       39  9.3
+Wisconsin         2.6      53       66 10.8
+Wyoming           6.8     161       60 15.6
+
+cbind rbind使用时必须要有相同的行数和列数
+datas <- rbind(data1,data2)
+rownames(data4)
+ [1] "Alabama"        "Alaska"         "Arizona"        "Arkansas"       "California"    
+ [6] "Colorado"       "Connecticut"    "Delaware"       "Florida"        "Georgia"       
+[11] "Hawaii"         "Idaho"          "Illinois"       "Indiana"        "Iowa"          
+[16] "Kansas"         "Kentucky"       "Louisiana"      "Maine"          "Maryland"      
+[21] "New Mexico"     "New York"       "North Carolina" "North Dakota"   "Ohio"          
+[26] "Oklahoma"       "Oregon"         "Pennsylvania"   "Rhode Island"   "South Carolina"
+[31] "South Dakota"   "Tennessee"      "Texas"          "Utah"           "Vermont"       
+[36] "Virginia"       "Washington"     "West Virginia"  "Wisconsin"      "Wyoming"       
+> length(rownames(data4))
+[1] 40
+
+找出重复值
+duplicated(data4)
+ [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[15] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+[29] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE
+
+取出非重复部分
+ data4[duplicated(data4),]
+ 
+数据转换三：转置矩阵
