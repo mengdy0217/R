@@ -1,0 +1,90 @@
+is.data.frame(cars32)
+[1] TRUE
+
+矩阵转化为数据框
+> dstate.x77 <- as.data.frame(state.x77)
+> is.data.frame(dstate.x77)
+
+data.frame(state.region,state.x77)
+                state.region Population Income Illiteracy Life.Exp Murder HS.Grad
+Alabama                South       3615   3624        2.1    69.05   15.1    41.3
+Alaska                  West        365   6315        1.5    69.31   11.3    66.7
+Arizona                 West       2212   4530        1.8    70.55    7.8    58.1
+Arkansas               South       2110   3378        1.9    70.66   10.1    39.9
+California              West      21198   5114        1.1    71.71   10.3    62.6
+Colorado                West       2541   4884        0.7    72.06    6.8    63.9
+Connecticut        Northeast       3100   5348        1.1    72.48    3.1    56.0
+
+ as.matrix(data.frame(state.region,state.x77)) 转换为矩阵后全部变为字符串型
+               state.region    Population Income Illiteracy Life.Exp Murder
+Alabama        "South"         " 3615"    "3624" "2.1"      "69.05"  "15.1"
+Alaska         "West"          "  365"    "6315" "1.5"      "69.31"  "11.3"
+Arizona        "West"          " 2212"    "4530" "1.8"      "70.55"  " 7.8"
+Arkansas       "South"         " 2110"    "3378" "1.9"      "70.66"  "10.1"
+California     "West"          "21198"    "5114" "1.1"      "71.71"  "10.3"
+Colorado       "West"          " 2541"    "4884" "0.7"      "72.06"  " 6.8"
+Connecticut    "Northeast"     " 3100"    "5348" "1.1"      "72.48"  " 3.1"
+
+methods(is) 可以看到is后面的函数
+
+x <- state.abb
+> x
+ [1] "AL" "AK" "AZ" "AR" "CA" "CO" "CT" "DE" "FL" "GA" "HI" "ID" "IL" "IN" "IA" "KS" "KY" "LA"
+[19] "ME" "MD" "MA" "MI" "MN" "MS" "MO" "MT" "NE" "NV" "NH" "NJ" "NM" "NY" "NC" "ND" "OH" "OK"
+[37] "OR" "PA" "RI" "SC" "SD" "TN" "TX" "UT" "VT" "VA" "WA" "WV" "WI" "WY"
+
+变成矩阵
+> dim(x) <-c(5,10)
+> x
+     [,1] [,2] [,3] [,4] [,5] [,6] [,7] [,8] [,9] [,10]
+[1,] "AL" "CO" "HI" "KS" "MA" "MT" "NM" "OK" "SD" "VA" 
+[2,] "AK" "CT" "ID" "KY" "MI" "NE" "NY" "OR" "TN" "WA" 
+[3,] "AZ" "DE" "IL" "LA" "MN" "NV" "NC" "PA" "TX" "WV" 
+[4,] "AR" "FL" "IN" "ME" "MS" "NH" "ND" "RI" "UT" "WI" 
+[5,] "CA" "GA" "IA" "MD" "MO" "NJ" "OH" "SC" "VT" "WY" 
+> x <- state.abb
+
+转换成因子
+> as.factor(x)
+ [1] AL AK AZ AR CA CO CT DE FL GA HI ID IL IN IA KS KY LA ME MD MA MI MN MS MO MT NE NV NH NJ NM
+[32] NY NC ND OH OK OR PA RI SC SD TN TX UT VT VA WA WV WI WY
+50 Levels: AK AL AR AZ CA CO CT DE FL GA HI IA ID IL IN KS KY LA MA MD ME MI MN MO MS MT ... WY
+
+转换成列表
+> as.list(x)
+[[1]]
+[1] "AL"
+
+[[2]]
+[1] "AK"
+
+[[3]]
+[1] "AZ"
+
+[[4]]
+[1] "AR"
+
+[[5]]
+[1] "CA"
+
+[[6]]
+[1] "CO"
+
+[[7]]
+[1] "CT"
+
+state <- data.frame(x,state.region,state.x77)
+state$Income 输出income这一列的数据
+ [1] 3624 6315 4530 3378 5114 4884 5348 4809 4815 4091 4963 4119 5107 4458 4628 4669 3712 3545
+[19] 3694 5299 4755 4751 4675 3098 4254 4347 4508 5149 4281 5237 3601 4903 3875 5087 4561 3983
+[37] 4660 4449 4558 3635 4167 3821 4188 4022 3907 4701 4864 3617 4468 4566
+
+> y <- state["Nevada",] 将Nevada这一国家的数据赋给y
+> unname(y) 去掉名字
+                                                      
+Nevada NV West 590 5149 0.5 69.03 11.5 65.2 188 109889
+> unlist(y) 
+           x state.region   Population       Income   Illiteracy     Life.Exp       Murder 
+        "NV"          "4"        "590"       "5149"        "0.5"      "69.03"       "11.5" 
+     HS.Grad        Frost         Area 
+      "65.2"        "188"     "109889" 
