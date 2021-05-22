@@ -52,6 +52,21 @@ melt函数：将宽数据变成长数据
 这篇melt函数讲得很好
 https://www.cnblogs.com/wkslearner/p/5734895.html
 
+melt的参数：
+id.vars
+id变量的向量。可以是整数(变量位置)或字符串(变量名)。若为空白，将使用所有非测量变量。
+measure.vars
+测量变量的向量。可以是整数(变量位置)或字符串(变量名)如果为空，将使用所有非id.vars
+variable.name
+用于存储测量变量名的变量名
+传递到或从其他方法传递的进一步参数。
+na.rm
+是否应该将NA值从数据集中移除?这将把显式缺失转换为隐式缺失。
+value.name
+用于存储值的变量名
+factorsAsStrings
+控制因子融化为测量变量时是否转换为字符。当为FALSE时，如果level在measure.vars中不相同，则强制执行强制。
+
 数组 表 矩阵
 data <- array(c(1:22,NA,"wo"),c(2,3,4)) 4个2*3的数组
 > data
@@ -158,7 +173,10 @@ data <- array(c(1:22,NA,"wo"),c(2,3,4)) 4个2*3的数组
 24    2   3  4    wo
 
 数据框
-x <- data.frame(id = 1:6,name=c("wang","zhang","li","chen","zhao","song"),shuxue=c(88,89,95,56,68,73),yvwen=c(76,65,58,84,92,87))
+x <- data.frame(id = 1:6,
+                name=c("wang","zhang","li","chen","zhao","song"),
+                shuxue=c(88,89,95,56,68,73),
+                yvwen=c(76,65,58,84,92,87))
 > x
   id  name shuxue yvwen
 1  1  wang     88    76
@@ -167,7 +185,7 @@ x <- data.frame(id = 1:6,name=c("wang","zhang","li","chen","zhao","song"),shuxue
 4  4  chen     56    84
 5  5  zhao     68    92
 6  6  song     73    87
-> melt(x,id=c("id","name"))
+> melt(x,id=c("id","name")) 根据id name这两列把 shuxue yvwen和成一列
    id  name variable value
 1   1  wang   shuxue    88
 2   2 zhang   shuxue    89
@@ -181,4 +199,148 @@ x <- data.frame(id = 1:6,name=c("wang","zhang","li","chen","zhao","song"),shuxue
 10  4  chen    yvwen    84
 11  5  zhao    yvwen    92
 12  6  song    yvwen    87
+命个名
+melt(x,id=1:2,variable.name = "kemu",value.name = "fenshu")
+   id  name   kemu fenshu
+1   1  wang shuxue     88
+2   2 zhang shuxue     89
+3   3    li shuxue     95
+4   4  chen shuxue     56
+5   5  zhao shuxue     68
+6   6  song shuxue     73
+7   1  wang  yvwen     76
+8   2 zhang  yvwen     65
+9   3    li  yvwen     58
+10  4  chen  yvwen     84
+11  5  zhao  yvwen     92
+12  6  song  yvwen     87
+
+melt(x,id=c("shuxue","yvwen"))让数学语文做为主列
+   shuxue yvwen variable value
+1      88    76       id     1
+2      89    65       id     2
+3      95    58       id     3
+4      56    84       id     4
+5      68    92       id     5
+6      73    87       id     6
+7      88    76     name  wang
+8      89    65     name zhang
+9      95    58     name    li
+10     56    84     name  chen
+11     68    92     name  zhao
+12     73    87     name  song
+
+也可以这样把数学和语文做为主列
+melt(x,measure.vars = c("id","name"))
+   shuxue yvwen variable value
+1      88    76       id     1
+2      89    65       id     2
+3      95    58       id     3
+4      56    84       id     4
+5      68    92       id     5
+6      73    87       id     6
+7      88    76     name  wang
+8      89    65     name zhang
+9      95    58     name    li
+10     56    84     name  chen
+11     68    92     name  zhao
+12     73    87     name  song
+
 列表
+建立一个列表
+shuzu <- list(matrix(1:4,nrow = 2),array(1:27,c(3,3,3)))
+> shuzu
+[[1]]
+     [,1] [,2]
+[1,]    1    3
+[2,]    2    4
+
+[[2]]
+, , 1
+
+     [,1] [,2] [,3]
+[1,]    1    4    7
+[2,]    2    5    8
+[3,]    3    6    9
+
+, , 2
+
+     [,1] [,2] [,3]
+[1,]   10   13   16
+[2,]   11   14   17
+[3,]   12   15   18
+
+, , 3
+
+     [,1] [,2] [,3]
+[1,]   19   22   25
+[2,]   20   23   26
+[3,]   21   24   27
+
+melt(shuzu) 行 列 值 小组 大组
+   Var1 Var2 value Var3 L1
+1     1    1     1   NA  1
+2     2    1     2   NA  1
+3     1    2     3   NA  1
+4     2    2     4   NA  1
+5     1    1     1    1  2
+6     2    1     2    1  2
+7     3    1     3    1  2
+8     1    2     4    1  2
+9     2    2     5    1  2
+10    3    2     6    1  2
+11    1    3     7    1  2
+12    2    3     8    1  2
+13    3    3     9    1  2
+14    1    1    10    2  2
+15    2    1    11    2  2
+16    3    1    12    2  2
+17    1    2    13    2  2
+18    2    2    14    2  2
+19    3    2    15    2  2
+20    1    3    16    2  2
+21    2    3    17    2  2
+22    3    3    18    2  2
+23    1    1    19    3  2
+24    2    1    20    3  2
+25    3    1    21    3  2
+26    1    2    22    3  2
+27    2    2    23    3  2
+28    3    2    24    3  2
+29    1    3    25    3  2
+30    2    3    26    3  2
+31    3    3    27    3  2
+
+
+cast函数
+这个网址很好
+https://www.cnblogs.com/wkslearner/p/5731015.html
+
+dcast
+数据
+熔化数据框，见熔化。
+formula
+铸造公式，详见具体细节。
+fun.aggregate
+如果变量不能识别每个输出单元的单个观察结果，则需要聚合函数。如果需要，默认为长度(包含一条消息)，但没有指定。
+进一步的参数传递给聚合函数
+margin
+变量名的向量(可以包括"grand\_col"和"grand\_row")用于计算所有的边距，或者TRUE用于计算所有的边距。任何不能设置边距的变量都将被悄悄地删除。
+subset
+引用表达式用于在重塑之前对数据进行子集化，例如子集= .(variable=="length")。
+fill
+用来填补结构缺失的值，默认值来自应用乐趣。集合到长度为0的向量
+drop
+丢失的组合应该删除还是保留?
+value.var
+存储值的列的名称，见guess_value的默认策略来解决这个问题。
+
+acast,dcast的区别在于输出结果。acast 输出结果为vector/matrix/array，dcast 输出结果为data.frame。
+data
+formula  
+fun.aggregate   聚合函数，表达式为：行变量~列变量~三维变量~......，另外，.表示后面没有数据列，…表示之前或之后的所有数据列
+margins  用于添加边界汇总数据
+
+subset   用于添加过滤条件，需要载入plyr包
+
+其他三个参数，用到的情况相对较少
