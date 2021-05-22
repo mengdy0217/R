@@ -316,31 +316,11 @@ cast函数
 这个网址很好
 https://www.cnblogs.com/wkslearner/p/5731015.html
 
-dcast
-数据
-熔化数据框，见熔化。
-formula
-铸造公式，详见具体细节。
-fun.aggregate
-如果变量不能识别每个输出单元的单个观察结果，则需要聚合函数。如果需要，默认为长度(包含一条消息)，但没有指定。
-进一步的参数传递给聚合函数
-margin
-变量名的向量(可以包括"grand\_col"和"grand\_row")用于计算所有的边距，或者TRUE用于计算所有的边距。任何不能设置边距的变量都将被悄悄地删除。
-subset
-引用表达式用于在重塑之前对数据进行子集化，例如子集= .(variable=="length")。
-fill
-用来填补结构缺失的值，默认值来自应用乐趣。集合到长度为0的向量
-drop
-丢失的组合应该删除还是保留?
-value.var
-存储值的列的名称，见guess_value的默认策略来解决这个问题。
-
 acast,dcast的区别在于输出结果。acast 输出结果为vector/matrix/array，dcast 输出结果为data.frame。
+
 data
 formula  
 fun.aggregate   聚合函数，表达式为：行变量~列变量~三维变量~......，另外，.表示后面没有数据列，…表示之前或之后的所有数据列
 margins  用于添加边界汇总数据
-
 subset   用于添加过滤条件，需要载入plyr包
-
 其他三个参数，用到的情况相对较少
