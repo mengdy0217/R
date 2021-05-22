@@ -457,3 +457,55 @@ apply(WorldPhones,MARGIN = 1,FUN = sum) 1表示对行处理
 > apply(WorldPhones,MARGIN = 2,FUN = mean) 2表示对列处理
     N.Amer     Europe       Asia     S.Amer    Oceania     Africa   Mid.Amer 
 66747.5714 34343.4286  6229.2857  2772.2857  2625.0000  1484.0000   841.7143 
+
+lapply:返回值是列表形式
+sapply:返回值是向量或者矩阵
+lapply(state.center, FUN=length)返回列表形式
+$x
+[1] 50
+
+$y
+[1] 50
+
+sapply(state.center, FUN=length)返回向量形式
+ x  y 
+50 50
+
+tapply 对两个列表进行分类
+> state.name
+ [1] "Alabama"        "Alaska"         "Arizona"        "Arkansas"       "California"    
+ [6] "Colorado"       "Connecticut"    "Delaware"       "Florida"        "Georgia"       
+[11] "Hawaii"         "Idaho"          "Illinois"       "Indiana"        "Iowa"          
+[16] "Kansas"         "Kentucky"       "Louisiana"      "Maine"          "Maryland"      
+[21] "Massachusetts"  "Michigan"       "Minnesota"      "Mississippi"    "Missouri"      
+[26] "Montana"        "Nebraska"       "Nevada"         "New Hampshire"  "New Jersey"    
+[31] "New Mexico"     "New York"       "North Carolina" "North Dakota"   "Ohio"          
+[36] "Oklahoma"       "Oregon"         "Pennsylvania"   "Rhode Island"   "South Carolina"
+[41] "South Dakota"   "Tennessee"      "Texas"          "Utah"           "Vermont"       
+[46] "Virginia"       "Washington"     "West Virginia"  "Wisconsin"      "Wyoming"       
+> state.division
+ [1] East South Central Pacific            Mountain           West South Central
+ [5] Pacific            Mountain           New England        South Atlantic    
+ [9] South Atlantic     South Atlantic     Pacific            Mountain          
+[13] East North Central East North Central West North Central West North Central
+[17] East South Central West South Central New England        South Atlantic    
+[21] New England        East North Central West North Central East South Central
+[25] West North Central Mountain           West North Central Mountain          
+[29] New England        Middle Atlantic    Mountain           Middle Atlantic   
+[33] South Atlantic     West North Central East North Central West South Central
+[37] Pacific            Middle Atlantic    New England        South Atlantic    
+[41] West North Central East South Central West South Central Mountain          
+[45] New England        South Atlantic     Pacific            South Atlantic    
+[49] East North Central Mountain          
+
+tapply(state.name, state.division,FUN=length)统计美国各个地区有几个州
+       New England    Middle Atlantic     South Atlantic East South Central 
+                 6                  3                  8                  4 
+West South Central East North Central West North Central           Mountain 
+                 4                  5                  7                  8 
+           Pacific 
+                 5 
+数据的中心化和标准化
+中心化：数据集的各项数据减去数据集的均值
+标准化：中心化之后除以数据集的标准差
+(x-mean(x))/sd(x)
