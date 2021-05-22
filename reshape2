@@ -324,3 +324,108 @@ fun.aggregate   聚合函数，表达式为：行变量~列变量~三维变量~.
 margins  用于添加边界汇总数据
 subset   用于添加过滤条件，需要载入plyr包
 其他三个参数，用到的情况相对较少
+acast(x1,id~variable)
+  shuxue yuwen
+1     89    77
+2     85    68
+3     68    86
+4     79    87
+5     96    92
+6     53    63
+
+> dcast(x1,id~variable)会显示id及其对应的分数
+  id shuxue yuwen
+1  1     89    77
+2  2     85    68
+3  3     68    86
+4  4     79    87
+5  5     96    92
+6  6     53    63
+dcast(x1,name~variable) 显示name及其分数
+   name shuxue yuwen
+1  chen     79    87
+2    li     68    86
+3  song     53    63
+4  wang     89    77
+5 zhang     85    68
+6  zhao     96    92
+
+ acast(x1,id~name~variable)
+, , shuxue
+
+  chen li song wang zhang zhao
+1   NA NA   NA   89    NA   NA
+2   NA NA   NA   NA    85   NA
+3   NA 68   NA   NA    NA   NA
+4   79 NA   NA   NA    NA   NA
+5   NA NA   NA   NA    NA   96
+6   NA NA   53   NA    NA   NA
+
+, , yuwen
+
+  chen li song wang zhang zhao
+1   NA NA   NA   77    NA   NA
+2   NA NA   NA   NA    68   NA
+3   NA 86   NA   NA    NA   NA
+4   87 NA   NA   NA    NA   NA
+5   NA NA   NA   NA    NA   92
+6   NA NA   63   NA    NA   NA
+
+dcast(x1,id~variable,mean,margins = T)求平均值，并且添加边界汇总数据
+     id   shuxue    yuwen    (all)
+1     1 89.00000 77.00000 83.00000
+2     2 85.00000 68.00000 76.50000
+3     3 68.00000 86.00000 77.00000
+4     4 79.00000 87.00000 83.00000
+5     5 96.00000 92.00000 94.00000
+6     6 53.00000 63.00000 58.00000
+7 (all) 78.33333 78.83333 78.58333
+
+dcast(x1,id~variable,mean,margins = c("id"))只对列求平均值
+     id   shuxue    yuwen
+1     1 89.00000 77.00000
+2     2 85.00000 68.00000
+3     3 68.00000 86.00000
+4     4 79.00000 87.00000
+5     5 96.00000 92.00000
+6     6 53.00000 63.00000
+7 (all) 78.33333 78.83333
+dcast(x1,id~variable,mean,margins = c("variable"))对行求平均值
+  id shuxue yuwen (all)
+1  1     89    77  83.0
+2  2     85    68  76.5
+3  3     68    86  77.0
+4  4     79    87  83.0
+5  5     96    92  94.0
+6  6     53    63  58.0
+dcast(x1,id+name~variable)
+  id  name shuxue yuwen
+1  1  wang     89    77
+2  2 zhang     85    68
+3  3    li     68    86
+4  4  chen     79    87
+5  5  zhao     96    92
+6  6  song     53    63
+
+
+ dcast(x1,name~variable)
+   name shuxue yuwen
+1  chen     79    87
+2    li     68    86
+3  song     53    63
+4  wang     89    77
+5 zhang     85    68
+6  zhao     96    92
+数据回复到初始形式
+> dcast(x1,variable~name)
+  variable chen li song wang zhang zhao
+1   shuxue   79 68   53   89    85   96
+2    yuwen   87 86   63   77    68   92
+
+dcast(x1,variable~id+name)
+  variable 1_wang 2_zhang 3_li 4_chen 5_zhao 6_song
+1   shuxue     89      85   68     79     96     53
+2    yuwen     77      68   86     87     92     63
+
+
+
