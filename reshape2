@@ -1,3 +1,4 @@
+x <- data.frame(k1=c(NA,NA,3,4,5),k2=c(1,NA,NA,4,5),data=c(1,2,3,4,5))
 x
   k1 k2 data
 1 NA  1    1
@@ -5,7 +6,9 @@ x
 3  3 NA    3
 4  4  4    4
 5  5  5    5
-> y
+
+y <- data.frame(k1=c(NA,2,NA,4,5),k2=c(NA,NA,3,4,5),data=c(1,2,3,4,5))
+y
   k1 k2 data
 1 NA NA    1
 2  2 NA    2
@@ -37,8 +40,9 @@ x
 
 merge比较混乱，reshape2包比较好
 安装reshape2
+
 names(airquality) <- tolower(names(airquality))把列名改成小写的
-> head(airquality)
+> head(airquality) 
   ozone solar.r wind temp month day
 1    41     190  7.4   67     5   1
 2    36     118  8.0   72     5   2
@@ -48,6 +52,48 @@ names(airquality) <- tolower(names(airquality))把列名改成小写的
 6    28      NA 14.9   66     5   6
 
 melt函数：将宽数据变成长数据
+
+R教程例子
+ class(airquality) 
+[1] "data.frame"  airquality的数据结构是数据框
+head(airquality)
+  ozone solar.r wind temp month day
+1    41     190  7.4   67     5   1
+2    36     118  8.0   72     5   2
+3    12     149 12.6   74     5   3
+4    18     313 11.5   62     5   4
+5    NA      NA 14.3   56     5   5
+6    28      NA 14.9   66     5   6
+x <- melt(airquality)head(airquality)
+head(x)前六个就是先写的ozone
+  variable value
+1    ozone    41
+2    ozone    36
+3    ozone    12
+4    ozone    18
+5    ozone    NA
+6    ozone    28
+> tail(x,10)  day排在后面
+    variable value
+909      day    21
+910      day    22
+911      day    23
+912      day    24
+913      day    25
+914      day    26
+915      day    27
+916      day    28
+917      day    29
+918      day    30
+> aql <- melt(airquality,id.vars = c("month","day")) 把month day这两个参数放在id列
+> head(aql)
+  month day variable value
+1     5   1    ozone    41
+2     5   2    ozone    36
+3     5   3    ozone    12
+4     5   4    ozone    18
+5     5   5    ozone    NA
+6     5   6    ozone    28
 
 这篇melt函数讲得很好
 https://www.cnblogs.com/wkslearner/p/5734895.html
@@ -199,6 +245,23 @@ x <- data.frame(id = 1:6,
 10  4  chen    yvwen    84
 11  5  zhao    yvwen    92
 12  6  song    yvwen    87
+
+y1 <- melt(y,id.vars = c("id","name")) id.vars也是同样的写法
+> y1
+   id  name variable value
+1   1  wang   shuxue    88
+2   2 zhang   shuxue    89
+3   3    li   shuxue    95
+4   4  chen   shuxue    56
+5   5  zhao   shuxue    68
+6   6  song   shuxue    73
+7   1  wang    yvwen    76
+8   2 zhang    yvwen    65
+9   3    li    yvwen    58
+10  4  chen    yvwen    84
+11  5  zhao    yvwen    92
+12  6  song    yvwen    87
+
 命个名
 melt(x,id=1:2,variable.name = "kemu",value.name = "fenshu")
    id  name   kemu fenshu
@@ -313,6 +376,58 @@ melt(shuzu) 行 列 值 小组 大组
 
 
 cast函数
+
+R教程
+aql <- melt(airquality,id.vars = c("month","day"))
+aqw <- dcast(aql,month+day~variable)
+> head(aqw)
+  month day ozone solar.r wind temp
+1     5   1    41     190  7.4   67
+2     5   2    36     118  8.0   72
+3     5   3    12     149 12.6   74
+4     5   4    18     313 11.5   62
+5     5   5    NA      NA 14.3   56
+6     5   6    28      NA 14.9   66
+> head(airquality)
+  ozone solar.r wind temp month day
+1    41     190  7.4   67     5   1
+2    36     118  8.0   72     5   2
+3    12     149 12.6   74     5   3
+4    18     313 11.5   62     5   4
+5    NA      NA 14.3   56     5   5
+6    28      NA 14.9   66     5   6
+
+对每一个month求平均值
+ aqw <- dcast(aql,month~variable,fun.aggregate = mean,na.rm=TRUE)
+> head(aqw)
+  month    ozone  solar.r      wind     temp
+1     5 23.61538 181.2963 11.622581 65.54839
+2     6 29.44444 190.1667 10.266667 79.10000
+3     7 59.11538 216.4839  8.941935 83.90323
+4     8 59.96154 171.8571  8.793548 83.96774
+5     9 31.44828 167.4333 10.180000 76.90000
+
+求month总和
+aqw <- dcast(aql,day~variable,fun.aggregate = sum,na.rm=TRUE)
+> head(aqw)
+  day ozone solar.r wind temp
+1   1   311     995 33.9  401
+2   2   172     874 45.8  404
+3   3   133     887 48.1  397
+4   4   187     789 43.1  409
+5   5   146     490 42.3  396
+6   6   166     670 60.2  399
+
+对每一个day求平均值
+ head(aqw)
+  day    ozone  solar.r  wind temp
+1   1 77.75000 199.0000  6.78 80.2
+2   2 43.00000 174.8000  9.16 80.8
+3   3 33.25000 177.4000  9.62 79.4
+4   4 62.33333 197.2500  8.62 81.8
+5   5 48.66667 163.3333  8.46 79.2
+6   6 41.50000 223.3333 12.04 79.8
+
 这个网址很好
 https://www.cnblogs.com/wkslearner/p/5731015.html
 
@@ -428,4 +543,29 @@ dcast(x1,variable~id+name)
 2    yuwen     77      68   86     87     92     63
 
 
+aqw1 <- dcast(aql,month~variable,mean,na.rm=TRUE)
+> aqw1
+  month    ozone  solar.r      wind     temp
+1     5 23.61538 181.2963 11.622581 65.54839
+2     6 29.44444 190.1667 10.266667 79.10000
+3     7 59.11538 216.4839  8.941935 83.90323
+4     8 59.96154 171.8571  8.793548 83.96774
+5     9 31.44828 167.4333 10.180000 76.90000
+> aqw <- dcast(aql,month~variable,fun.aggregate = mean,na.rm=TRUE)
+> aqw
+  month    ozone  solar.r      wind     temp
+1     5 23.61538 181.2963 11.622581 65.54839
+2     6 29.44444 190.1667 10.266667 79.10000
+3     7 59.11538 216.4839  8.941935 83.90323
+4     8 59.96154 171.8571  8.793548 83.96774
+5     9 31.44828 167.4333 10.180000 76.90000
+> aqw1 <- dcast(aql,month~variable,mean,na.rm=TRUE,margins = TRUE)
+> aqw1
+  month    ozone  solar.r      wind     temp    (all)
+1     5 23.61538 181.2963 11.622581 65.54839 68.70696
+2     6 29.44444 190.1667 10.266667 79.10000 87.38384
+3     7 59.11538 216.4839  8.941935 83.90323 93.49748
+4     8 59.96154 171.8571  8.793548 83.96774 79.71207
+5     9 31.44828 167.4333 10.180000 76.90000 71.82689
+6 (all) 42.12931 185.9315  9.957516 77.88235 80.05722
 
