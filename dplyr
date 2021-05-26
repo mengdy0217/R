@@ -796,3 +796,27 @@ dplyr::full_join(a,b,"x1")全链接 就是取并集
 1  C  3
 
 之后把dplyr包帮助文档的函数都练一遍。
+
+filter函数
+ vars <- c("mass","height")
+> cond <- c(80,150)
+> vars
+[1] "mass"   "height"
+意思就是取出mass大于80，height大于150的所有行
+> starwars %>% filter(.data[[vars[[1]]]] >cond[[1]],.data[[vars[[2]]]]>cond[[2]])
+# A tibble: 21 x 14
+   name      height  mass hair_color  skin_color  eye_color birth_year sex    gender homeworld
+   <chr>      <int> <dbl> <chr>       <chr>       <chr>          <dbl> <chr>  <chr>  <chr>    
+ 1 Darth Va~    202   136 none        white       yellow          41.9 male   mascu~ Tatooine 
+ 2 Owen Lars    178   120 brown, grey light       blue            52   male   mascu~ Tatooine 
+ 3 Biggs Da~    183    84 black       light       brown           24   male   mascu~ Tatooine 
+ 4 Anakin S~    188    84 blond       fair        blue            41.9 male   mascu~ Tatooine 
+ 5 Chewbacca    228   112 brown       unknown     blue           200   male   mascu~ Kashyyyk 
+ 6 Jabba De~    175  1358 NA          green-tan,~ orange         600   herma~ mascu~ Nal Hutta
+ 7 Jek Tono~    180   110 brown       fair        blue            NA   male   mascu~ Bestine ~
+ 8 IG-88        200   140 none        metal       red             15   none   mascu~ NA       
+ 9 Bossk        190   113 none        green       red             53   male   mascu~ Trandosha
+10 Ackbar       180    83 none        brown mott~ orange          41   male   mascu~ Mon Cala 
+# ... with 11 more rows, and 4 more variables: species <chr>, films <list>, vehicles <list>,
+#   starships <list>
+> 
