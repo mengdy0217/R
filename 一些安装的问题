@@ -1,0 +1,3 @@
+1.package ‘Hmsic’ is not available for this version of R
+手动取镜像网站下载R包 https://cran.r-project.org/mirrors.html 选择package 选r-release下载
+在R（不是Rstudio）程序包-从本地文件安装-找到在镜像网站下载的文件-打开即可http://www.360doc.com/content/18/0423/06/21698478_747955954.shtml
