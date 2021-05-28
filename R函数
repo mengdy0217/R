@@ -292,13 +292,21 @@ head(warpbreaks)
 4     8 59.96154 83.96154
 5     9 31.44828 76.89655
 
+.表示剩下的全部
+aggregate(.~Species,data=iris,mean)
+     Species Sepal.Length Sepal.Width Petal.Length Petal.Width
+1     setosa        5.006       3.428        1.462       0.246
+2 versicolor        5.936       2.770        4.260       1.326
+3  virginica        6.588       2.974        5.552       2.026
 
-
-
-
-
-
-
+aggregate(len~.,data=ToothGrowth,mean)
+  supp dose   len
+1   OJ  0.5 13.23
+2   VC  0.5  7.98
+3   OJ  1.0 22.70
+4   VC  1.0 16.77
+5   OJ  2.0 26.06
+6   VC  2.0 26.14
 
 
 对其中几列的分组统计（因为Manufacturer这一列有很多重复的，所以规整求平均值一下）
@@ -463,7 +471,7 @@ am     4 13   1.00  0.00   1.00    1.00  0.00  1.00   1.00   0.00  NaN      NaN 
 
 
 45.频数统计函数
-
+split(mtcars,mtcars$cyl)结果是分成了4 6 8三组
 
 
 
