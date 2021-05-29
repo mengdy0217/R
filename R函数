@@ -473,11 +473,178 @@ am     4 13   1.00  0.00   1.00    1.00  0.00  1.00   1.00   0.00  NaN      NaN 
 45.频数统计函数
 split(mtcars,mtcars$cyl)结果是分成了4 6 8三组
 
+先转成因子型，然后对它进行分类
+mtcars$cyl <- as.factor(mtcars$cyl)
+> split(mtcars,mtcars$cyl)
+$`4`
+                mpg cyl  disp  hp drat    wt  qsec vs am gear carb          Model
+Datsun 710     22.8   4 108.0  93 3.85 2.320 18.61  1  1    4    1     Datsun 710
+Merc 240D      24.4   4 146.7  62 3.69 3.190 20.00  1  0    4    2      Merc 240D
+Merc 230       22.8   4 140.8  95 3.92 3.150 22.90  1  0    4    2       Merc 230
+Fiat 128       32.4   4  78.7  66 4.08 2.200 19.47  1  1    4    1       Fiat 128
+Honda Civic    30.4   4  75.7  52 4.93 1.615 18.52  1  1    4    2    Honda Civic
+Toyota Corolla 33.9   4  71.1  65 4.22 1.835 19.90  1  1    4    1 Toyota Corolla
+Toyota Corona  21.5   4 120.1  97 3.70 2.465 20.01  1  0    3    1  Toyota Corona
+Fiat X1-9      27.3   4  79.0  66 4.08 1.935 18.90  1  1    4    1      Fiat X1-9
+Porsche 914-2  26.0   4 120.3  91 4.43 2.140 16.70  0  1    5    2  Porsche 914-2
+Lotus Europa   30.4   4  95.1 113 3.77 1.513 16.90  1  1    5    2   Lotus Europa
+Volvo 142E     21.4   4 121.0 109 4.11 2.780 18.60  1  1    4    2     Volvo 142E
 
+$`6`
+                mpg cyl  disp  hp drat    wt  qsec vs am gear carb          Model
+Mazda RX4      21.0   6 160.0 110 3.90 2.620 16.46  0  1    4    4      Mazda RX4
+Mazda RX4 Wag  21.0   6 160.0 110 3.90 2.875 17.02  0  1    4    4  Mazda RX4 Wag
+Hornet 4 Drive 21.4   6 258.0 110 3.08 3.215 19.44  1  0    3    1 Hornet 4 Drive
+Valiant        18.1   6 225.0 105 2.76 3.460 20.22  1  0    3    1        Valiant
+Merc 280       19.2   6 167.6 123 3.92 3.440 18.30  1  0    4    4       Merc 280
+Merc 280C      17.8   6 167.6 123 3.92 3.440 18.90  1  0    4    4      Merc 280C
+Ferrari Dino   19.7   6 145.0 175 3.62 2.770 15.50  0  1    5    6   Ferrari Dino
 
+$`8`
+                     mpg cyl  disp  hp drat    wt  qsec vs am gear carb               Model
+Hornet Sportabout   18.7   8 360.0 175 3.15 3.440 17.02  0  0    3    2   Hornet Sportabout
+Duster 360          14.3   8 360.0 245 3.21 3.570 15.84  0  0    3    4          Duster 360
+Merc 450SE          16.4   8 275.8 180 3.07 4.070 17.40  0  0    3    3          Merc 450SE
+Merc 450SL          17.3   8 275.8 180 3.07 3.730 17.60  0  0    3    3          Merc 450SL
+Merc 450SLC         15.2   8 275.8 180 3.07 3.780 18.00  0  0    3    3         Merc 450SLC
+Cadillac Fleetwood  10.4   8 472.0 205 2.93 5.250 17.98  0  0    3    4  Cadillac Fleetwood
+Lincoln Continental 10.4   8 460.0 215 3.00 5.424 17.82  0  0    3    4 Lincoln Continental
+Chrysler Imperial   14.7   8 440.0 230 3.23 5.345 17.42  0  0    3    4   Chrysler Imperial
+Dodge Challenger    15.5   8 318.0 150 2.76 3.520 16.87  0  0    3    2    Dodge Challenger
+AMC Javelin         15.2   8 304.0 150 3.15 3.435 17.30  0  0    3    2         AMC Javelin
+Camaro Z28          13.3   8 350.0 245 3.73 3.840 15.41  0  0    3    4          Camaro Z28
+Pontiac Firebird    19.2   8 400.0 175 3.08 3.845 17.05  0  0    3    2    Pontiac Firebird
+Ford Pantera L      15.8   8 351.0 264 4.22 3.170 14.50  0  1    5    4      Ford Pantera L
+Maserati Bora       15.0   8 301.0 335 3.54 3.570 14.60  0  1    5    8       Maserati Bora
 
+分组统计
+cut(mtcars$mpg,seq(10,50,10))
+ [1] (20,30] (20,30] (20,30] (20,30] (10,20] (10,20] (10,20] (20,30] (20,30] (10,20] (10,20] (10,20] (10,20]
+[14] (10,20] (10,20] (10,20] (10,20] (30,40] (30,40] (30,40] (20,30] (10,20] (10,20] (10,20] (10,20] (20,30]
+[27] (20,30] (30,40] (10,20] (10,20] (10,20] (20,30]
+Levels: (10,20] (20,30] (30,40] (40,50]
 
+统计各组个数
+> table( cut(mtcars$mpg,seq(10,50,10)))
+(10,20] (20,30] (30,40] (40,50] 
+     18      10       4       0 
 
+统计各组频率
+> prop.table(table(mtcars$cyl))
+      4       6       8 
+0.34375 0.21875 0.43750 
+
+乘100方便计算
+prop.table(table(mtcars$cyl))*100
+     4      6      8 
+34.375 21.875 43.750 
+
+table(Arthritis$Treatment,Arthritis$Improved)
+         
+          None Some Marked
+  Placebo   29    7      7
+  Treated   13    7     21
+
+with(data=Arthritis,{table(Treatment,Improved)})
+         Improved
+Treatment None Some Marked
+  Placebo   29    7      7
+  Treated   13    7     21
+  
+ x <- xtabs(~Treatment+Improved,data=Arthritis)
+> margin.table(x)
+[1] 84
+
+prop.table(x,1)
+         Improved
+Treatment      None      Some    Marked
+  Placebo 0.6744186 0.1627907 0.1627907
+  Treated 0.3170732 0.1707317 0.5121951
+
+addmargins(x) 行和列都添加
+         Improved
+Treatment None Some Marked Sum
+  Placebo   29    7      7  43
+  Treated   13    7     21  41
+  Sum       42   14     28  84
+> addmargins(x,1) 只添加列的和
+         Improved
+Treatment None Some Marked
+  Placebo   29    7      7
+  Treated   13    7     21
+  Sum       42   14     28
+> addmargins(x,2) 只添加行的和
+         Improved
+Treatment None Some Marked Sum
+  Placebo   29    7      7  43
+  Treated   13    7     21  41
+
+三个变量
+ xtabs(~Treatment+Improved+Sex,data=Arthritis)
+, , Sex = Female
+
+         Improved
+Treatment None Some Marked
+  Placebo   19    7      6
+  Treated    6    5     16
+
+, , Sex = Male
+
+         Improved
+Treatment None Some Marked
+  Placebo   10    0      1
+  Treated    7    2      5
+
+> y <- xtabs(~Treatment+Improved+Sex,data=Arthritis)
+> ftable(y)
+                   Sex Female Male
+Treatment Improved                
+Placebo   None             19   10
+          Some              7    0
+          Marked            6    1
+Treated   None              6    7
+          Some              5    2
+          Marked           16    5
+
+prop.table(y)
+, , Sex = Female
+
+         Improved
+Treatment       None       Some     Marked
+  Placebo 0.22619048 0.08333333 0.07142857
+  Treated 0.07142857 0.05952381 0.19047619
+
+, , Sex = Male
+
+         Improved
+Treatment       None       Some     Marked
+  Placebo 0.11904762 0.00000000 0.01190476
+  Treated 0.08333333 0.02380952 0.05952381
+
+> z <- ftable(y)
+> prop.table(z)
+                   Sex     Female       Male
+Treatment Improved                          
+Placebo   None         0.22619048 0.11904762
+          Some         0.08333333 0.00000000
+          Marked       0.07142857 0.01190476
+Treated   None         0.07142857 0.08333333
+          Some         0.05952381 0.02380952
+          Marked       0.19047619 0.05952381
+          
+          
+ 
+46 独立性检验函数
+根据频数信息判断两类因子彼此相关或者相互独立的假设检验。所谓独立性就是指变量之间是独立的，没有关系。
+
+卡方检验
+Fisher检验
+Cochran-Mantel-Haensze检验
+
+根据问题的需要对研究的总体做假设，记为H0；选取合适的统计量，这个统计量要在H0成立的前提下，其分布已知。
+由实测的样本计算出统计量的值，并根据预先给定的显著性水平进行检验，做出拒绝或者接受假设H0的判断。
+P-value 就是Probability的值，是通过计算得到的一个概率值，也就在原假设为真时，得到最大的或者超出所得到的检验统计量值的概率。
+当p<0.05时拒绝原假设。P > 0.05 不拒绝原假设。
 
 
 
