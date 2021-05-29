@@ -398,7 +398,7 @@ aqw <- dcast(aql,month+day~variable)
 6    28      NA 14.9   66     5   6
 
 对每一个month求平均值
- aqw <- dcast(aql,month~variable,fun.aggregate = mean,na.rm=TRUE)
+ aqw <- dcast(aql,month~variable,fun.aggregate = mean,na.rm=TRUE)  这样也可以的aqw <- dcast(aql,month~variable,mean)
 > head(aqw)
   month    ozone  solar.r      wind     temp
 1     5 23.61538 181.2963 11.622581 65.54839
