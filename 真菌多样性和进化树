@@ -1,1 +1,22 @@
+打开真菌多样性和进化树文件。
+load("test.Rdata")
+t <- load("test.Rdata")
+> t
+[1] "its"      "tree_its"
 
+可以在右上角Enviroment下面找到 its 和 tree_its这两个数据库。
+head(its,2)
+                            Feature_ID  Kingdom        Phylum              Class           Order
+20517 b44ee4670e1f399310857658bf115fbc k__Fungi p__Ascomycota c__Sordariomycetes   o__Xylariales
+1883  1021a9ff4076b4feb0c65f92fec86e0f k__Fungi p__Ascomycota c__Dothideomycetes o__Pleosporales
+                  Family            Genus         Species BL_1 BL_2 BL_3 BT_1 BT_2 BT_3 CC_1 CC_2 CC_3 CD_1
+20517    f__Diatrypaceae g__Monosporascus s__unidentified    0    0    0    0    0    0    0    0    0    0
+1883  f__Melanommataceae  g__unidentified s__unidentified    0    0    0    0    0    0    0    0    0  110
+      CD_2 CD_3 CH_1 CH_2 CH_3
+20517    0    0    0    0    0
+1883     0    0    0    0    0
+
+tree <- tree_its[["tip.label"]]
+> head(tree)
+[1] "4be9c1d68708ac22b24245f4299b9835" "d8e2004382e5e4f63ab8cc718d5faf0d" "f08f1e6145aa89076db502db482162fa"
+[4] "09494b508dbaf899553c6850ac64ca81" "8acd6c0b0f00080b3dc14e50e8b022b3" "ea317e066c277c0ae63481478686c1c8"
