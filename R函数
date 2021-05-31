@@ -637,7 +637,7 @@ Treated   None         0.07142857 0.08333333
 46 独立性检验函数
 根据频数信息判断两类因子彼此相关或者相互独立的假设检验。所谓独立性就是指变量之间是独立的，没有关系。
 
-卡方检验
+chisq.test() 卡方检验
 Fisher检验
 Cochran-Mantel-Haensze检验
 
@@ -768,9 +768,29 @@ x <- matrix(c(12,5,7,7),ncol=2)
 
 
 
-?fisher.test
+
 傅里叶检验 F检验
 ?fisher.test
+
+alternative	
+indicates the alternative hypothesis and must be one of "two.sided", "greater" or "less". 
+You can specify just the initial letter. Only used in the 2 by 2 case.
+表示备择假设，且必须是“双边”，（单边）“更大”或“更小”中的一个。您可以只指定首字母。只在2 × 2的情况下使用。
+
+conf.int	
+logical indicating if a confidence interval for the odds ratio in a 2 by 2 table should be computed (and returned).
+
+conf.level	
+confidence level for the returned confidence interval. Only used in the 2 by 2 case and if conf.int = TRUE.
+
+conf.int
+表明是否应该计算(并返回)2 × 2表格中比值比的置信区间的逻辑。
+
+conf.level
+对返回置信区间的置信水平。只在2 * 2的情况下使用，如果conf.int = TRUE
+
+
+
 > TeaTasting <- matrix(c(3,1,1,3),nrow = 2,dimnames = list(Guess=c("Milk","Tea"),Truth=c("Milk","Tea")))
 > TeaTasting
       Truth
@@ -803,7 +823,162 @@ sample estimates:
 odds ratio 
   6.408309 
 
+Convictions <- matrix(c(2,10,15,3),nrow=2,
+               dimnames = list(c("Dizygotic", "Monozygotic"),
+	       c("Convicted", "Not convicted")))
+> Convictions
+            Convicted Not convicted
+Dizygotic           2            15
+Monozygotic        10             3
 
+默认应该是双边检测
+fisher.test(Convictions)
+
+	Fisher's Exact Test for Count Data
+
+data:  Convictions
+p-value = 0.0005367
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.003325764 0.363182271
+sample estimates:
+odds ratio 
+0.04693661 
+
+单边检测less
+> fisher.test(Convictions,alternative = "less")
+
+	Fisher's Exact Test for Count Data
+
+data:  Convictions
+p-value = 0.0004652
+alternative hypothesis: true odds ratio is less than 1
+95 percent confidence interval:
+ 0.0000000 0.2849601
+sample estimates:
+odds ratio 
+0.04693661 
+
+单边检测greater
+> fisher.test(Convictions,alternative = "greater")
+
+	Fisher's Exact Test for Count Data
+
+data:  Convictions
+p-value = 1
+alternative hypothesis: true odds ratio is greater than 1
+95 percent confidence interval:
+ 0.00501032        Inf
+sample estimates:
+odds ratio 
+0.04693661 
+
+> fisher.test(Convictions,alternative = "two.sided")
+
+	Fisher's Exact Test for Count Data
+
+data:  Convictions
+p-value = 0.0005367
+alternative hypothesis: true odds ratio is not equal to 1
+95 percent confidence interval:
+ 0.003325764 0.363182271
+sample estimates:
+odds ratio 
+0.04693661 
+
+fisher.test(Convictions,conf.level = 0.95)$conf.int
+[1] 0.003325764 0.363182271
+attr(,"conf.level")
+[1] 0.95
+
+fisher.test(Convictions, conf.level = 0.99)$conf.int
+[1] 0.001386333 0.578851645
+attr(,"conf.level")
+[1] 0.99
+
+
+Job <- matrix(c(1,2,1,0,3,3,6,1,10,10,14,9,6,7,12,11),4,4,
+       dimnames = list(income=c("< 15k","15-25k","25-40k","> 40k"),
+       satisfaction=c("VeryD","LittleD","ModeratesS","VeryS")))
+
+> fisher.test(Job)
+	Fisher's Exact Test for Count Data
+data:  Job
+p-value = 0.7827
+alternative hypothesis: two.sided
+
+> Job
+        satisfaction
+income   VeryD LittleD ModeratesS VeryS
+  < 15k      1       3         10     6
+  15-25k     2       3         10     7
+  25-40k     1       6         14    12
+  > 40k      0       1          9    11
+
+
+
+ ?mantelhaen.test
+ ?mantelhaen.test
+ gragresti(1990)， 231- 237页，
+《青霉素和兔子的研究:立即注射或1.5小时延迟注射青霉素保护兔子免受致命注射乙型溶血性链球菌的影响》
+> Rabbits <- array(c(0,0,6,5,3,0,3,6,6,2,0,4,5,6,1,0,2,5,0,0),
+             dim=c(2,2,5),                                     #5个2*2的矩阵
+	     dimnames = list(Delay=c("None","1.5h"),           #纵坐标 （立即 1.5之后）
+	     Response = c("Cured","Died"),                     #治愈的和死的
+	     Penicillin.Level = c("1/8","1/4","1/2","1","4"))) #剂量
+> Rabbits
+, , Penicillin.Level = 1/8
+
+      Response
+Delay  Cured Died
+  None     0    6
+  1.5h     0    5
+
+, , Penicillin.Level = 1/4
+
+      Response
+Delay  Cured Died
+  None     3    3
+  1.5h     0    6
+
+, , Penicillin.Level = 1/2
+
+      Response
+Delay  Cured Died
+  None     6    0
+  1.5h     2    4
+
+, , Penicillin.Level = 1
+
+      Response
+Delay  Cured Died
+  None     5    1
+  1.5h     6    0
+
+, , Penicillin.Level = 4
+
+      Response
+Delay  Cured Died
+  None     2    0
+  1.5h     5    0
+
+ mantelhaen.test(Rabbits)
+
+	Mantel-Haenszel chi-squared test with continuity correction
+
+data:  Rabbits
+Mantel-Haenszel X-squared = 3.9286, df = 1, p-value = 0.04747
+alternative hypothesis: true common odds ratio is not equal to 1
+95 percent confidence interval:
+  1.026713 47.725133
+sample estimates:
+common odds ratio 
+                7 
+		
+参数exect
+应该计算Mantel-Haenszel检验还是精确条件检验(给定地层边缘)的逻辑指示。只在2 × 2 × K的情况下使用。
+
+ 
  
 47.相关性分析函数
 
