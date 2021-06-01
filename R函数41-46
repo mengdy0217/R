@@ -402,7 +402,8 @@ aggregate(Cars93[c("Min.Price","Price","Max.Price","MPG.city")],by=list(Cars93$O
 2 non-USA  17.75556 20.50889  23.25556 23.86667
 
 对产地和品牌同时分组
-aggregate(Cars93[c("Min.Price","Price","Max.Price","MPG.city")],by=list(Origin=Cars93$Origin,Manufacturer=Cars93$Manufacturer),mean)
+aggregate(Cars93[c("Min.Price","Price","Max.Price","MPG.city")],
+          by=list(Origin=Cars93$Origin,Manufacturer=Cars93$Manufacturer),mean)
     Origin  Manufacturer Min.Price    Price Max.Price MPG.city
 1  non-USA         Acura  21.05000 24.90000    28.750 21.50000
 2  non-USA          Audi  28.35000 33.40000    38.450 19.50000
@@ -776,6 +777,10 @@ alternative
 indicates the alternative hypothesis and must be one of "two.sided", "greater" or "less". 
 You can specify just the initial letter. Only used in the 2 by 2 case.
 表示备择假设，且必须是“双边”，（单边）“更大”或“更小”中的一个。您可以只指定首字母。只在2 × 2的情况下使用。
+two.sided 
+greater 计算正相关
+less 计算负相关
+
 
 conf.int	
 logical indicating if a confidence interval for the odds ratio in a 2 by 2 table should be computed (and returned).
@@ -979,8 +984,9 @@ common odds ratio
 应该计算Mantel-Haenszel检验还是精确条件检验(给定地层边缘)的逻辑指示。只在2 × 2 × K的情况下使用。
 
  
- 
-47.相关性分析函数
+
+
+
 
 
 
