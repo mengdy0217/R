@@ -539,7 +539,7 @@ iris %>% pivot_longer(c(Sepal.Length,Petal.Length))
  9         3.6         0.2 setosa  Sepal.Length   5  
 10         3.6         0.2 setosa  Petal.Length   1.4
 
-starwars %>% select(name:mass) 选中这三行
+starwars %>% select(name:mass) 选中这三列
 # A tibble: 87 x 3
    name               height  mass
    <chr>               <int> <dbl>
