@@ -197,7 +197,86 @@ T检验：
 
 
 绘图函数。
+1.基础绘图函数
+2.lattice包
+3.ggplot2包
+4.grid包
 
+ls("package:graphics")  可以得到87个绘图包
+demo(graphics) 可以看见各种图的小样
+help(package="graphics")
+
+散点图：x y两个坐标轴
+直方图：因子
+热力图：数据矩阵
+
+plot是最复杂的函数
+?plot
+
+plot(women)
+plot(women$weight,women$height)
+以上两个是散点图，下面的是直方图（转换成了因子类型）
+plot(as.factor(women$height))
+
+plot(as.factor(mtcars$cyl))
+
+箱线图
+plot(as.factor(mtcars$cyl),mtcars$carb)
+反过来就是散点图
+plot(mtcars$carb,as.factor(mtcars$cyl))
+两者都是因子就是脊柱图
+plot(as.factor(mtcars$carb),as.factor(mtcars$cyl))
+
+fit <- lm(height~weight,data=women)
+> plot(fit) #生成四幅图
+按<Return>键来看下一个图: 
+按<Return>键来看下一个图: 
+按<Return>键来看下一个图: 
+按<Return>键来看下一个图:
+
+S3系统
+面向对象编程。
+
+属性 泛型函数 方法
+methods(plot)
+ [1] plot.acf*           plot.data.frame*   
+ [3] plot.decomposed.ts* plot.default       
+ [5] plot.dendrogram*    plot.density*      
+ [7] plot.ecdf           plot.factor*       
+ [9] plot.formula*       plot.function      
+[11] plot.hclust*        plot.histogram*    
+[13] plot.HoltWinters*   plot.isoreg*       
+[15] plot.lm*            plot.medpolish*    
+[17] plot.mlm*           plot.ppr*          
+[19] plot.prcomp*        plot.princomp*     
+[21] plot.profile.nls*   plot.R6*           
+[23] plot.raster*        plot.spec*         
+[25] plot.stepfun        plot.stl*          
+[27] plot.table*         plot.ts            
+[29] plot.tskernel*      plot.TukeyHSD*     
+see '?methods' for accessing help and source code
+> methods(print)
+methods(summary)
+?par #对绘图函数进行设置的 
+
+给条形图加颜色
+plot(as.factor(mtcars$cyl),col=c("red","green","blue"))
+
+50.自定义函数
+利用自己编的函数加上数据集与文档组合，就可以形成新的R包。
+比如输入一个函数不加括号就会显示它的源代码。
+
+函数名称 函数声明 函数参数 函数体
+名字必须字母开头的字母和数字组合。
+myfun <- function(选项参数)
+{
+函数体
+}
+
+计算偏度和峰度值
+
+偏度：skewness:统计数据分布偏斜方向和程度的度量。统计数据非对称程度的数字特征。
+峰度：peakedness:kurtosis. 峰态系数，表征概率密度分布曲线在平均值处特征高低的特征数。
 
 
 
