@@ -279,6 +279,78 @@ myfun <- function(选项参数)
 峰度：peakedness:kurtosis. 峰态系数，表征概率密度分布曲线在平均值处特征高低的特征数。
 
 
+mystats <- function(x,na.omit=FALSE){
++ if(na.omit)
++   x <- x[!is.na(x)]
++ m <- mean(x)
++ n <- length(x)
++ s <- sd(x)
++ skew <- sum((x-m^3/s^3))/n  #偏度
++ kurt <- sum((x-m^4/s^4))/n-3 #峰度
++ return(c(n=m,mean=m,stdev=s,skew=skew,kurtosis=kurt))}
+> x <- 1:100
+> mystats(x)
+       n     mean    stdev     skew kurtosis 
+50.50000 50.50000 29.01149 45.22571 38.31910 
+
+
+循环与向量化操作
+函数内部通过循环实现向量化操作。
+if 
+for
+while
+switch
+
+for (i in 1:10) {
++ print("Hello World!")    
++ }
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+
+i = 1;while (i<=10) {print("Hello World!");i=i+1} #这个辣鸡 写i+=1不可以的
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+
+i = 1;while(i<=10){print("Hello World!");i=i+2}
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+[1] "Hello World!"
+
+score=70;if(score > 60){print("Passed")} else{print("Failed")}
+[1] "Passed"
+> ifelse(score > 60,print("Passed"),print("failed"))
+[1] "Passed"
+[1] "Passed"
+
+ifelse(score > 60,"Passed","failed") #这个没写print 因为ifelse自带print功能。
+[1] "Passed"
+
+
+
+
+
+
+
+
+
 
 
 
