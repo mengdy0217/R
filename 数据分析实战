@@ -1,0 +1,213 @@
+小麦产量案例
+房地产案例
+性价比案例
+药物实验案例
+社会科学研究案例
+量化投资案例
+反面案例
+
+52、线性回归
+回归，regression,是指用一个或多个预测变量，也称自变量（或解释变量），来预测响应变量（因变量，结果变量，校标变量）的方法。
+
+最小二乘回归法 OLS
+
+?lm
+
+响应变量 ~ 预测变量 如z~x+y
+
+fit <- lm(weight~height,data=women)
+> fit
+
+Call:
+lm(formula = weight ~ height, data = women)
+
+Coefficients:
+(Intercept)       height  
+     -87.52         3.45    #这个就是公式 weight = 3.45*height-87.51667
+
+> summary(fit)
+ 
+Call:  #所采用的公式
+lm(formula = weight ~ height, data = women)
+
+Residuals: 残差
+    Min      1Q  Median      3Q     Max 
+-1.7333 -1.1333 -0.3833  0.7417  3.1167 
+   最小值   1/4值 中位数值   3/4值  最大值、  值越小说明模型越精确。
+
+
+Coefficients:# Estimate系数 函数就是 weight = 3.45*height-87.51667
+             Estimate Std. Error t value Pr(>|t|)    #pr 是系数为0的概率，也是小于0.05，即拒绝原假设，变量不独立。
+(Intercept) -87.51667    5.93694  -14.74 1.71e-09 ***  #三颗星是最好的结果
+height        3.45000    0.09114   37.85 1.09e-14 ***
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1  #三颗星最好结果
+
+Residual standard error: 1.525 on 13 degrees of freedom  #残差的标准误差。值越大越好
+Multiple R-squared:  0.991,	Adjusted R-squared:  0.9903 #这个模型能解释99.1%的数据，（0.9%的数据不符合这个模型）
+F-statistic:  1433 on 1 and 13 DF,  p-value: 1.091e-14 #看模型是否显著，p-value的值越小越好。
+
+53.线性回归2
+对拟合线性模型非常有用的其他函数
+summary
+coefficients
+confint
+fitted
+residauls
+anova
+vcov
+AIC
+plot
+predict
+
+coefficients(fit)  #summary里Coefficients的部分
+(Intercept)      height 
+  -87.51667     3.45000 
+
+confint(fit) #列出置信区间，默认95%
+                  2.5 %     97.5 %
+(Intercept) -100.342655 -74.690679
+height         3.253112   3.646888
+
+confint(fit,level = 0.5)
+                  25 %       75 %
+(Intercept) -91.635892 -83.397441
+height        3.386767   3.513233
+
+fitted(fit) #列出拟合模型的预测值
+       1        2        3        4        5        6        7        8 
+112.5833 116.0333 119.4833 122.9333 126.3833 129.8333 133.2833 136.7333 
+       9       10       11       12       13       14       15 
+140.1833 143.6333 147.0833 150.5333 153.9833 157.4333 160.8833 
+
+#得到残差  实际值与预测值的差别
+women$weight - fitted(fit)
+          1           2           3           4           5           6 
+ 2.41666667  0.96666667  0.51666667  0.06666667 -0.38333333 -0.83333333 
+          7           8           9          10          11          12 
+-1.28333333 -1.73333333 -1.18333333 -1.63333333 -1.08333333 -0.53333333 
+         13          14          15 
+ 0.01666667  1.56666667  3.11666667 
+
+#残差值 与上述算的是一样的
+residuals(fit)
+          1           2           3           4           5           6 
+ 2.41666667  0.96666667  0.51666667  0.06666667 -0.38333333 -0.83333333 
+          7           8           9          10          11          12 
+-1.28333333 -1.73333333 -1.18333333 -1.63333333 -1.08333333 -0.53333333 
+         13          14          15 
+ 0.01666667  1.56666667  3.11666667 
+
+#预测
+predict(fit,women)
+       1        2        3        4        5        6        7        8 
+112.5833 116.0333 119.4833 122.9333 126.3833 129.8333 133.2833 136.7333 
+       9       10       11       12       13       14       15 
+140.1833 143.6333 147.0833 150.5333 153.9833 157.4333 160.8833 
+
+plot(fit)
+#残差拟合图
+#动态Q-Q图
+#大小位置图
+#残差影响图
+都是用来评价拟合模型的
+
+找到一条直线 使得残差值最小
+
+ plot(women$height,women$weight) #是散点图
+> abline(fit) #拟合曲线出现
+
+采用多元回归试试
+fit2 <- lm(weight~height+I(height^2),data=women) #必须要放在I函数里
+> fit2
+
+Call:
+lm(formula = weight ~ height + I(height^2), data = women)
+
+Coefficients:
+(Intercept)       height  I(height^2)  
+  261.87818     -7.34832      0.08306  
+
+
+summary(fit2)
+
+Call:
+lm(formula = weight ~ height + I(height^2), data = women)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.50941 -0.29611 -0.00941  0.28615  0.59706 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 261.87818   25.19677  10.393 2.36e-07 ***
+height       -7.34832    0.77769  -9.449 6.58e-07 ***
+I(height^2)   0.08306    0.00598  13.891 9.32e-09 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.3841 on 12 degrees of freedom
+Multiple R-squared:  0.9995,	Adjusted R-squared:  0.9994 
+F-statistic: 1.139e+04 on 2 and 12 DF,  p-value: < 2.2e-16
+
+  plot(women$height,women$weight)
+> abline(fit)
+> lines(women$height,fitted(fit2),col="red")
+
+  
+fit3 <- lm(weight~height+I(height^2)+I(height^3),data=women)
+> fit3
+
+Call:
+lm(formula = weight ~ height + I(height^2) + I(height^3), data = women)
+
+Coefficients:
+(Intercept)       height  I(height^2)  
+ -8.967e+02    4.641e+01   -7.462e-01  
+I(height^3)  
+  4.253e-03  
+
+> summary(fit3)
+
+Call:
+lm(formula = weight ~ height + I(height^2) + I(height^3), data = women)
+
+Residuals:
+     Min       1Q   Median       3Q      Max 
+-0.40677 -0.17391  0.03091  0.12051  0.42191 
+
+Coefficients:
+              Estimate Std. Error t value Pr(>|t|)   
+(Intercept) -8.967e+02  2.946e+02  -3.044  0.01116 * 
+height       4.641e+01  1.366e+01   3.399  0.00594 **
+I(height^2) -7.462e-01  2.105e-01  -3.544  0.00460 **
+I(height^3)  4.253e-03  1.079e-03   3.940  0.00231 **
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 0.2583 on 11 degrees of freedom
+Multiple R-squared:  0.9998,	Adjusted R-squared:  0.9997 
+F-statistic: 1.679e+04 on 3 and 11 DF,  p-value: < 2.2e-16
+  
+  
+plot(women$height,women$weight)
+> abline(fit)
+> lines(women$height,fitted(fit2),col="red")
+> lines(women$height,fitted(fit3),col="blue")
+
+54.多元线性回归
+
+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+
