@@ -197,14 +197,423 @@ plot(women$height,women$weight)
 > lines(women$height,fitted(fit3),col="blue")
 
 54.多元线性回归
+states <- as.data.frame(state.x77[,c("Murder","Population","Illiteracy","Income","Frost")])
+> states
+               Murder Population Illiteracy Income Frost
+Alabama          15.1       3615        2.1   3624    20
+Alaska           11.3        365        1.5   6315   152
+Arizona           7.8       2212        1.8   4530    15
+
+fit <- lm(Murder~Population+Illiteracy+Income+Frost,data=states)
+> summary(fit)
+
+Call:
+lm(formula = Murder ~ Population + Illiteracy + Income + Frost, 
+    data = states)
+
+Residuals:
+    Min      1Q  Median      3Q     Max 
+-4.7960 -1.6495 -0.0811  1.4815  7.6210 
+
+Coefficients:
+             Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 1.235e+00  3.866e+00   0.319   0.7510    
+Population  2.237e-04  9.052e-05   2.471   0.0173 *  
+Illiteracy  4.143e+00  8.744e-01   4.738 2.19e-05 ***
+Income      6.442e-05  6.837e-04   0.094   0.9253    
+Frost       5.813e-04  1.005e-02   0.058   0.9541    
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.535 on 45 degrees of freedom
+Multiple R-squared:  0.567,	Adjusted R-squared:  0.5285 
+F-statistic: 14.73 on 4 and 45 DF,  p-value: 9.133e-08
+
+coef(fit) #可以得到回归方程
+ (Intercept)   Population   Illiteracy       Income        Frost 
+1.2345634112 0.0002236754 4.1428365903 0.0000644247 0.0005813055 
+> options(digits = 4)#修改一下有效数字
+> coef(fit)
+(Intercept)  Population  Illiteracy      Income       Frost 
+  1.235e+00   2.237e-04   4.143e+00   6.442e-05   5.813e-04   
+
+fit <- lm(mpg~hp+wt+hp:wt,data=mtcars)
+> summary(fit)
+
+Call:
+lm(formula = mpg ~ hp + wt + hp:wt, data = mtcars) #因为不知道hp和wt是什么关系，但有交互关系，所以用:表示
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-3.063 -1.649 -0.736  1.421  4.551 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept) 49.80842    3.60516   13.82  5.0e-14 ***
+hp          -0.12010    0.02470   -4.86  4.0e-05 ***
+wt          -8.21662    1.26971   -6.47  5.2e-07 ***
+hp:wt        0.02785    0.00742    3.75  0.00081 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 2.15 on 28 degrees of freedom
+Multiple R-squared:  0.885,	Adjusted R-squared:  0.872 
+F-statistic: 71.7 on 3 and 28 DF,  p-value: 2.98e-13
+
+  
+?AIC 赤池信息准则
+得到的值越小越好。说明越小可以用较小的参数得到足够的拟合度。
+?AIC
+> fit1 <- lm(Murder~Population+Illiteracy+Income+Frost,data=states)
+> fit2 <- lm(Murder~Population+Illiteracy,data=states)
+> 
+> AIC(fit1,fit2)
+     df   AIC
+fit1  6 241.6
+fit2  4 237.7
+
+55 回归诊断
+fit <- lm(weight~height,data=women)
+> fit
+
+par(mfrow=c(2,2))
+> plot(fit)
+  
+56 方差分析
+Analysis of Variance 也称为变异数分析，用于两个及两个以上的均数差别的显著性分析。
+例如药物研究实验，处理组与对照组进行比较。
+
+以精神病为例子
+(1)单因素组间方差分析 （只有治疗方案的差别）
+   单因素组间方差分析 （只有治疗时间的差别）
+(2)双因素方差分析    （治疗方案是时间都有差别） 可以弄两个主效应和一个交互效应。
+(3)协方差分析 ANCOVA  方差分析中包含了协变量
+(4)多元方差分析 MANOVA 有多个因变量
+(5)多元协方差分析 MANCOVA
+
+实例
+library(multcomp) #调用这个包里的数据集
+
+cholesterol
+      trt response
+1   1time    3.861
+2   1time   10.387
+3   1time    5.906
+4   1time    3.061
+5   1time    7.720
+6   1time    2.714
+7   1time    4.924
+8   1time    2.304
+9   1time    7.530
+10  1time    9.412
+11 2times   10.399
+12 2times    8.603
+13 2times   13.632
+14 2times    3.505
+15 2times    7.770
+16 2times    8.627
+17 2times    9.227
+18 2times    6.316
+19 2times   15.826
+20 2times    8.344
+21 4times   13.962
+22 4times   13.961
+23 4times   13.918
+24 4times    8.053
+25 4times   11.043
+26 4times   12.369
+27 4times   10.392
+28 4times    9.029
+29 4times   12.842
+30 4times   18.179
+31  drugD   16.982
+32  drugD   15.458
+33  drugD   19.979
+34  drugD   14.739
+35  drugD   13.585
+36  drugD   10.865
+37  drugD   17.590
+38  drugD    8.819
+39  drugD   17.963
+40  drugD   17.632
+41  drugE   21.512
+42  drugE   27.244
+43  drugE   20.520
+44  drugE   15.771
+45  drugE   22.885
+46  drugE   23.953
+47  drugE   21.593
+48  drugE   18.306
+49  drugE   20.385
+50  drugE   17.307
 
 
-  
-  
-  
-  
-  
-  
+
+?cholesterol
+
+attach(cholesterol)
+> table(trt)
+trt
+ 1time 2times 4times  drugD  drugE 
+    10     10     10     10     10 
+
+ aggregate(response,by=list(trt),mean) #求药物效果的平均值
+  Group.1      x
+1   1time  5.782
+2  2times  9.225
+3  4times 12.375
+4   drugD 15.361
+5   drugE 20.948
+
+fit <- aov(response~trt,data=cholesterol)
+> fit
+Call:
+   aov(formula = response ~ trt, data = cholesterol)
+
+Terms:
+                   trt Residuals
+Sum of Squares  1351.4     468.8
+Deg. of Freedom      4        45
+
+Residual standard error: 3.227
+Estimated effects may be unbalanced
+> summary(fit)
+            Df Sum Sq Mean Sq F value  Pr(>F)        #F值越大 P值越小越好。
+trt          4   1351     338    32.4 9.8e-13 ***
+Residuals   45    469      10                    
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+再用lm分析一次（回归分析）
+ fit_lm <- lm(response~trt,data=cholesterol)
+> fit_lm
+
+Call:
+lm(formula = response ~ trt, data = cholesterol)
+
+Coefficients:
+(Intercept)    trt2times    trt4times     trtdrugD     trtdrugE  
+       5.78         3.44         6.59         9.58        15.17  
+
+> summary(fit_lm)
+
+Call:
+lm(formula = response ~ trt, data = cholesterol)
+
+Residuals:
+   Min     1Q Median     3Q    Max 
+-6.542 -1.967 -0.002  1.890  6.601 
+
+Coefficients:
+            Estimate Std. Error t value Pr(>|t|)    
+(Intercept)     5.78       1.02    5.67  9.8e-07 ***
+trt2times       3.44       1.44    2.39    0.021 *  
+trt4times       6.59       1.44    4.57  3.8e-05 ***
+trtdrugD        9.58       1.44    6.64  3.5e-08 ***
+trtdrugE       15.17       1.44   10.51  1.1e-13 ***
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+Residual standard error: 3.23 on 45 degrees of freedom
+Multiple R-squared:  0.742,	Adjusted R-squared:  0.72 
+F-statistic: 32.4 on 4 and 45 DF,  p-value: 9.82e-13
+
+litter
+#是协变量方差分析：一个因变量，多个自变量
+table(litter$dose)
+
+  0   5  50 500 
+ 20  19  18  17 
+
+litter #可以看出number并不是自变量
+   dose weight gesttime number
+1     0  28.05     22.5     15
+2     0  33.33     22.5     14
+3     0  36.37     22.0     14
+4     0  35.52     22.0     13
+5     0  36.77     21.5     15
+
+attach(litter)
+> aggregate(weight,by=list(dose),mean)
+  Group.1     x
+1       0 32.31
+2       5 29.31
+3      50 29.87
+4     500 29.65
+
+fit <- aov(weight~gesttime+dose,data=litter)
+summary(fit)
+            Df Sum Sq Mean Sq F value Pr(>F)   
+gesttime     1    134   134.3    8.05  0.006 **
+dose         3    137    45.7    2.74  0.050 * 
+Residuals   69   1151    16.7                  
+---
+Signif. codes:  
+0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+双因素方差分析
+ToothGrowth
+    len supp dose
+1   4.2   VC  0.5
+2  11.5   VC  0.5
+3   7.3   VC  0.5
+4   5.8   VC  0.5
+5   6.4   VC  0.5
+6  10.0   VC  0.5
+7  11.2   VC  0.5
+8  11.2   VC  0.5
+9   5.2   VC  0.5
+10  7.0   VC  0.5
+11 16.5   VC  1.0
+12 16.5   VC  1.0
+13 15.2   VC  1.0
+14 17.3   VC  1.0
+15 22.5   VC  1.0
+16 17.3   VC  1.0
+17 13.6   VC  1.0
+18 14.5   VC  1.0
+19 18.8   VC  1.0
+20 15.5   VC  1.0
+21 23.6   VC  2.0
+22 18.5   VC  2.0
+23 33.9   VC  2.0
+24 25.5   VC  2.0
+25 26.4   VC  2.0
+26 32.5   VC  2.0
+27 26.7   VC  2.0
+28 21.5   VC  2.0
+29 23.3   VC  2.0
+30 29.5   VC  2.0
+31 15.2   OJ  0.5
+32 21.5   OJ  0.5
+33 17.6   OJ  0.5
+34  9.7   OJ  0.5
+35 14.5   OJ  0.5
+36 10.0   OJ  0.5
+37  8.2   OJ  0.5
+38  9.4   OJ  0.5
+39 16.5   OJ  0.5
+40  9.7   OJ  0.5
+41 19.7   OJ  1.0
+42 23.3   OJ  1.0
+43 23.6   OJ  1.0
+44 26.4   OJ  1.0
+45 20.0   OJ  1.0
+46 25.2   OJ  1.0
+47 25.8   OJ  1.0
+48 21.2   OJ  1.0
+49 14.5   OJ  1.0
+50 27.3   OJ  1.0
+51 25.5   OJ  2.0
+52 26.4   OJ  2.0
+53 22.4   OJ  2.0
+54 24.5   OJ  2.0
+55 24.8   OJ  2.0
+56 30.9   OJ  2.0
+57 26.4   OJ  2.0
+58 27.3   OJ  2.0
+59 29.4   OJ  2.0
+60 23.0   OJ  2.0
+
+可以看出来VC的品种和剂量这两个变量
+attach(ToothGrowth)
+
+维生素和剂量的二维列联表
+xtabs(~supp+dose)
+    dose
+supp 0.5  1  2
+  OJ  10 10 10
+  VC  10 10 10
+
+aggregate(len,by=list(supp,dose),mean)
+  Group.1 Group.2     x
+1      OJ     0.5 13.23
+2      VC     0.5  7.98
+3      OJ     1.0 22.70
+4      VC     1.0 16.77
+5      OJ     2.0 26.06
+6      VC     2.0 26.14
+可以发现剂量越小，OJ VC二者差别越明显
+
+将dose转化为因子型
+class(ToothGrowth$dose)
+[1] "numeric"
+ToothGrowth$dose <- factor(ToothGrowth$dose)
+> class(ToothGrowth$dose)
+[1] "factor"
+
+
+ fit <- aov(len~supp*dose,data = ToothGrowth)
+> summary(fit)
+            Df Sum Sq Mean Sq F value  Pr(>F)    
+supp         1    205     205   15.57 0.00023 ***
+dose         2   2426    1213   92.00 < 2e-16 ***
+supp:dose    2    108      54    4.11 0.02186 *  
+Residuals   54    712      13                    
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+多元函数回归分析
+
+根据shelf对三项指标求平均值
+attach(UScereal)
+> shelf <- factor(shelf)
+> aggregate(cbind(calories,fat,sugars),by=list(shelf),mean)
+  Group.1 calories    fat sugars
+1       1    119.5 0.6621  6.295
+2       2    129.8 1.3413 12.508
+3       3    180.1 1.9449 10.857
+
+fit <- manova(cbind(calories,fat,sugars)~shelf)
+> fit
+Call:
+   manova(cbind(calories, fat, sugars) ~ shelf)
+
+Terms:
+                 shelf Residuals
+calories         50435    198860
+fat                 18       155
+sugars             381      1798
+Deg. of Freedom      2        62
+
+Residual standard errors: 56.63 1.582 5.385
+Estimated effects may be unbalanced
+> summary(fit)
+          Df Pillai approx F num Df den Df Pr(>F)    
+shelf      2  0.402     5.12      6    122  1e-04 ***
+Residuals 62                                         
+---
+Signif. codes:  0 ‘***’ 0.001 ‘**’ 0.01 ‘*’ 0.05 ‘.’ 0.1 ‘ ’ 1
+
+
+
+58 功效分析
+建模和转换数据的关系
+
+power analysis:在给定置信区间情况下，判断检测到给定效应值所需的样本量。
+               在给定置信区间情况下，能计算某样本量能检测给定效应值的概率。
+
+
+样本大小
+显著性水平
+功效
+效应值
+
+library(pwr)
+> help(package="pwr")
+> pwr.f2.test(u=3,sig.level = 0.05,power = 0.9,f2=0.0769)
+
+     Multiple regression power calculation 
+
+              u = 3
+              v = 184.2
+             f2 = 0.0769
+      sig.level = 0.05
+          power = 0.9
+
+
   
   
   
