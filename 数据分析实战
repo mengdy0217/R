@@ -880,6 +880,433 @@ testdata <- data.frame(rating)
 > 
 
 
+61 主成分分析 PC分析
+
+Principal Component Analysis 将大量相关变量转化为一组很少的不相关变量，这些无关的变量成为主成分。
+
+数据预处理
+选择分析模型（主成分还是因子）
+判断主成分/因子数目
+选择主成分/因子
+旋转主成分/因子
+解释结果
+计算主成分或因子得分
+
+library(psych)
+> help(package="psych")
+
+ USJudgeRatings
+                CONT INTG DMNR DILG CFMG DECI PREP FAMI ORAL WRIT PHYS RTEN
+AARONSON,L.H.    5.7  7.9  7.7  7.3  7.1  7.4  7.1  7.1  7.1  7.0  8.3  7.8
+ALEXANDER,J.M.   6.8  8.9  8.8  8.5  7.8  8.1  8.0  8.0  7.8  7.9  8.5  8.7
+ARMENTANO,A.J.   7.2  8.1  7.8  7.8  7.5  7.6  7.5  7.5  7.3  7.4  7.9  7.8
+BERDON,R.I.      6.8  8.8  8.5  8.8  8.3  8.5  8.7  8.7  8.4  8.5  8.8  8.7
+BRACKEN,J.J.     7.3  6.4  4.3  6.5  6.0  6.2  5.7  5.7  5.1  5.3  5.5  4.8
+BURNS,E.B.       6.2  8.8  8.7  8.5  7.9  8.0  8.1  8.0  8.0  8.0  8.6  8.6
+CALLAHAN,R.J.   10.6  9.0  8.9  8.7  8.5  8.5  8.5  8.5  8.6  8.4  9.1  9.0
+COHEN,S.S.       7.0  5.9  4.9  5.1  5.4  5.9  4.8  5.1  4.7  4.9  6.8  5.0
+
+碎石图分析，选择pc分析，循环100次。
+fa.parallel的目的是选择主成分，形成一个碎石图，看有几个碎石的y值大于1就选择几个主成分。
+fa.parallel(USJudgeRatings,fa="pc",n.iter = 100)
+Parallel analysis suggests that the number of factors =  NA  and the number of components =  1 
+
+进行主成分分析，选择1个主成分，不旋转，不计算得分
+pc <- principal(USJudgeRatings,nfactors = 1,rotate = "none",scores = FALSE)
+> pc
+Principal Components Analysis
+Call: principal(r = USJudgeRatings, nfactors = 1, rotate = "none", 
+    scores = FALSE)
+Standardized loadings (pattern matrix) based upon correlation matrix
+
+
+PC1是观测变量与主成分的相关系数
+h2是方差，是主成分对每个变量的方差解释度
+u2是主成分唯一性，是方差无法被主成分解释的比例
+     PC1      h2     u2 com
+CONT -0.01 9.6e-05 0.9999   1
+INTG  0.92 8.4e-01 0.1563   1
+DMNR  0.91 8.3e-01 0.1660   1
+DILG  0.97 9.4e-01 0.0613   1
+CFMG  0.96 9.3e-01 0.0723   1
+DECI  0.96 9.2e-01 0.0764   1
+PREP  0.98 9.7e-01 0.0299   1
+FAMI  0.98 9.5e-01 0.0469   1
+ORAL  1.00 9.9e-01 0.0091   1
+WRIT  0.99 9.8e-01 0.0195   1
+PHYS  0.89 8.0e-01 0.2014   1
+RTEN  0.99 9.7e-01 0.0275   1
+
+                 PC1
+SS loadings    10.13
+Proportion Var  0.84
+
+Mean item complexity =  1
+Test of the hypothesis that 1 component is sufficient.
+
+The root mean square of the residuals (RMSR) is  0.05 
+ with the empirical chi square  12.56  with prob <  1 
+
+Fit based upon off diagonal values = 1
+
+将scores设为Ture,可以计算每个变量的得分。
+pc <- principal(USJudgeRatings,nfactors = 1,rotate = "none",scores = TRUE)
+> pc$scores
+                        PC1
+AARONSON,L.H.   -0.18400648
+ALEXANDER,J.M.   0.74765156
+ARMENTANO,A.J.   0.07072468
+BERDON,R.I.      1.13651889
+BRACKEN,J.J.    -2.15848207
+BURNS,E.B.       0.76821742
+CALLAHAN,R.J.    1.22243063
+COHEN,S.S.      -2.51260343
+DALY,J.J.        1.14963289
+DANNEHY,J.F.     0.32918115
+DEAN,H.H.       -0.10589377
+DEVITA,H.J.     -0.45257054
+DRISCOLL,P.J.   -0.21014722
+GRILLO,A.E.     -1.01338259
+HADDEN,W.L.JR.   0.42501399
+HAMILL,E.C.     -0.13973759
+HEALEY.A.H.     -0.91030943
+HULL,T.C.       -0.22553233
+LEVINE,I.        0.20145341
+LEVISTER,R.L.   -1.36839157
+MARTIN,L.F.     -0.57128247
+MCGRATH,J.F.    -0.97984173
+MIGNONE,A.F.    -1.99621925
+MISSAL,H.M.     -0.02581675
+MULVEY,H.M.      1.05284946
+NARUK,H.J.       1.42897516
+O'BRIEN,F.J.     0.47123628
+O'SULLIVAN,T.J.  1.09004545
+PASKEY,L.        0.59472217
+RUBINOW,J.E.     1.50120742
+SADEN.G.A.       0.34527687
+SATANIELLO,A.G.  0.17036943
+SHEA,D.M.        0.81143377
+SHEA,J.F.JR.     1.12983152
+SIDOR,W.J.      -2.15582532
+SPEZIALE,J.A.    0.63632965
+SPONZO,M.J.      0.37901740
+STAPLETON,J.F.   0.22614913
+TESTO,R.J.      -0.66166162
+TIERNEY,W.L.JR.  0.42466794
+WALL,R.A.       -0.81315467
+WRIGHT,D.B.      0.45956919
+ZARRILLI,K.J.   -0.28764663
+
+
+#身高指标例子
+ Harman23.cor
+$cov
+               height arm.span forearm lower.leg weight bitro.diameter chest.girth chest.width
+height          1.000    0.846   0.805     0.859  0.473          0.398       0.301       0.382
+arm.span        0.846    1.000   0.881     0.826  0.376          0.326       0.277       0.415
+forearm         0.805    0.881   1.000     0.801  0.380          0.319       0.237       0.345
+lower.leg       0.859    0.826   0.801     1.000  0.436          0.329       0.327       0.365
+weight          0.473    0.376   0.380     0.436  1.000          0.762       0.730       0.629
+bitro.diameter  0.398    0.326   0.319     0.329  0.762          1.000       0.583       0.577
+chest.girth     0.301    0.277   0.237     0.327  0.730          0.583       1.000       0.539
+chest.width     0.382    0.415   0.345     0.365  0.629          0.577       0.539       1.000
+
+$center
+[1] 0 0 0 0 0 0 0 0
+
+$n.obs
+[1] 305
+
+碎石分析
+fa.parallel(Harman23.cor$cov,n.obs = 302,fa="pc",n.iter = 100,show.legend = FALSE)
+
+
+pc <- principal(Harman23.cor$cov,nfactors = 2,rotate = "none")
+> pc
+Principal Components Analysis
+Call: principal(r = Harman23.cor$cov, nfactors = 2, rotate = "none")
+Standardized loadings (pattern matrix) based upon correlation matrix
+                PC1   PC2   h2    u2 com
+height         0.86 -0.37 0.88 0.123 1.4
+arm.span       0.84 -0.44 0.90 0.097 1.5
+forearm        0.81 -0.46 0.87 0.128 1.6
+lower.leg      0.84 -0.40 0.86 0.139 1.4
+weight         0.76  0.52 0.85 0.150 1.8
+bitro.diameter 0.67  0.53 0.74 0.261 1.9
+chest.girth    0.62  0.58 0.72 0.283 2.0
+chest.width    0.67  0.42 0.62 0.375 1.7
+
+                       PC1  PC2
+SS loadings           4.67 1.77
+Proportion Var        0.58 0.22
+Cumulative Var        0.58 0.81
+Proportion Explained  0.73 0.27
+Cumulative Proportion 0.73 1.00
+
+Mean item complexity =  1.7
+Test of the hypothesis that 2 components are sufficient.
+
+The root mean square of the residuals (RMSR) is  0.05 
+
+Fit based upon off diagonal values = 0.99
+
+
+62 因子分析
+Exploratory Factor Analysis   EFA分析法
+是一系列用来发现一组变量的潜在结构的方法。通过寻找一组更小的、潜在的或隐藏的结构来解释已观测到的显式变量的关系。
+（寻找隐藏在表面现象背后的
+因子分析：寻找许多虚拟的公共因子组合成变量。
+主成分分析：将因子组合成更大的部分
+
+例子：
+语文、数学、外语、物理、化学、生物、历史、地理、政治
+主成分分析：语文、数学、外语、文科、理科
+因子分析：逻辑推理（数学、物理、化学、生物），语言天赋（语文、外语），逻辑分析（历史、政治、地理）
+所以难就难在寻找变量的公共因子。
+
+二者区别：
+1都对原始数据降维处理
+2都消除了原始指标的相关性对综合评价所造成的信息重复的影响
+3构造综合评价时所涉及的权数具有客观性
+4在信息损失不大情况下减少评价工作量
+
+区别：
+主成分分析：
+1用较少的变量表示原来的样本
+2目的是样本数据信息损失最小的原则下，对高维变量进行降维
+3参数估计，一般是求相关矩阵的特征值和特征向量，取前几个作为主成分
+4应用：应用较少变量解释各个样本的特征
+
+因子分析：
+1用较少的因子表示原来的变量
+2目的尽可能保持原变量相互关系，寻找变量的公共因子
+3参数估计：指定几个公共因子，将其还原成相关系数矩阵，在和原样本相关矩阵最想相似原则下，估计各个公因子的估计值
+4应用：找到具有本质意义的少量因子来归纳原变量的特征
+
+
+?factanal
+> library(psych)
+
+ability.cov
+$cov
+        general picture  blocks   maze reading   vocab
+general  24.641   5.991  33.520  6.023  20.755  29.701
+picture   5.991   6.700  18.137  1.782   4.936   7.204
+blocks   33.520  18.137 149.831 19.424  31.430  50.753
+maze      6.023   1.782  19.424 12.711   4.757   9.075
+reading  20.755   4.936  31.430  4.757  52.604  66.762
+vocab    29.701   7.204  50.753  9.075  66.762 135.292
+
+$center
+[1] 0 0 0 0 0 0
+
+$n.obs
+[1] 112
+
+心理学测试：126个人的6个测试
+
+ability.cov$cov
+        general picture  blocks   maze reading   vocab
+general  24.641   5.991  33.520  6.023  20.755  29.701
+picture   5.991   6.700  18.137  1.782   4.936   7.204
+blocks   33.520  18.137 149.831 19.424  31.430  50.753
+maze      6.023   1.782  19.424 12.711   4.757   9.075
+reading  20.755   4.936  31.430  4.757  52.604  66.762
+vocab    29.701   7.204  50.753  9.075  66.762 135.292
+There were 12 warnings (use warnings() to see them)
+> options(digits = 2)
+> covariances <- ability.cov$cov
+> correlations <- cov2cor(covariances)
+> correlations
+        general picture blocks maze reading vocab
+general    1.00    0.47   0.55 0.34    0.58  0.51
+picture    0.47    1.00   0.57 0.19    0.26  0.24
+blocks     0.55    0.57   1.00 0.45    0.35  0.36
+maze       0.34    0.19   0.45 1.00    0.18  0.22
+reading    0.58    0.26   0.35 0.18    1.00  0.79
+vocab      0.51    0.24   0.36 0.22    0.79  1.00
+
+fa.parallel(correlations,fa="both",n.obs = 112,n.iter = 100)
+
+得到两个碎石在1上面，所以选两个因子。
+?fa
+
+fa <- fa(correlations,nfactors = 2,rotate = "none",fm="pa")
+> fa
+Factor Analysis using method =  pa
+Call: fa(r = correlations, nfactors = 2, rotate = "none", fm = "pa")
+Standardized loadings (pattern matrix) based upon correlation matrix
+         PA1   PA2   h2    u2 com
+general 0.75  0.07 0.57 0.432 1.0
+picture 0.52  0.32 0.38 0.623 1.7
+blocks  0.75  0.52 0.83 0.166 1.8
+maze    0.39  0.22 0.20 0.798 1.6
+reading 0.81 -0.51 0.91 0.089 1.7
+vocab   0.73 -0.39 0.69 0.313 1.5
+
+                       PA1  PA2
+SS loadings           2.75 0.83
+Proportion Var        0.46 0.14
+Cumulative Var        0.46 0.60
+Proportion Explained  0.77 0.23
+Cumulative Proportion 0.77 1.00
+
+Mean item complexity =  1.5
+Test of the hypothesis that 2 factors are sufficient.
+
+The degrees of freedom for the null model are  15  and the objective function was  2.5
+The degrees of freedom for the model are 4  and the objective function was  0.07 
+
+The root mean square of the residuals (RMSR) is  0.03 
+The df corrected root mean square of the residuals is  0.06 
+
+Fit based upon off diagonal values = 0.99
+Measures of factor score adequacy             
+                                                   PA1  PA2
+Correlation of (regression) scores with factors   0.96 0.92
+Multiple R square of scores with factors          0.93 0.84
+Minimum correlation of possible factor scores     0.86 0.68
+
+
+斜交旋转
+ fa.paomax
+Factor Analysis using method =  pa
+Call: fa(r = correlations, nfactors = 2, fm = "pa", rolates = "promax")
+Standardized loadings (pattern matrix) based upon correlation matrix
+         PA1   PA2   h2    u2 com
+general 0.75  0.07 0.57 0.432 1.0
+picture 0.52  0.32 0.38 0.623 1.7
+blocks  0.75  0.52 0.83 0.166 1.8
+maze    0.39  0.22 0.20 0.798 1.6
+reading 0.81 -0.51 0.91 0.089 1.7
+vocab   0.73 -0.39 0.69 0.313 1.5
+
+                       PA1  PA2
+SS loadings           2.75 0.83
+Proportion Var        0.46 0.14
+Cumulative Var        0.46 0.60
+Proportion Explained  0.77 0.23
+Cumulative Proportion 0.77 1.00
+
+Mean item complexity =  1.5
+Test of the hypothesis that 2 factors are sufficient.
+
+The degrees of freedom for the null model are  15  and the objective function was  2.5
+The degrees of freedom for the model are 4  and the objective function was  0.07 
+
+The root mean square of the residuals (RMSR) is  0.03 
+The df corrected root mean square of the residuals is  0.06 
+
+Fit based upon off diagonal values = 0.99
+Measures of factor score adequacy             
+                                                   PA1  PA2
+Correlation of (regression) scores with factors   0.96 0.92
+Multiple R square of scores with factors          0.93 0.84
+Minimum correlation of possible factor scores     0.86 0.68
+
+
+63 购物篮分析
+library(arules)
+> data("Groceries")
+> Groceries
+transactions in sparse format with
+ 9835 transactions (rows) and
+ 169 items (columns)
+ 
+inspect(Groceries)
+
+
+fit <- apriori(Groceries,parameter = list(support=0.01,confidence=0.5))
+Apriori
+
+Parameter specification:
+ confidence minval smax arem  aval originalSupport maxtime
+        0.5    0.1    1 none FALSE            TRUE       5
+ support minlen maxlen target  ext
+    0.01      1     10  rules TRUE
+
+Algorithmic control:
+ filter tree heap memopt load sort verbose
+    0.1 TRUE TRUE  FALSE TRUE    2    TRUE
+
+Absolute minimum support count: 98 
+
+set item appearances ...[0 item(s)] done [0.00s].
+set transactions ...[169 item(s), 9835 transaction(s)] done [0.01s].
+sorting and recoding items ... [88 item(s)] done [0.00s].
+creating transaction tree ... done [0.00s].
+checking subsets of size 1 2 3 4 done [0.00s].
+writing ... [15 rule(s)] done [0.00s].
+creating S4 object  ... done [0.00s].
+
+
+inspect(fit)
+     lhs                     rhs                support confidence coverage lift count
+[1]  {curd,                                                                           
+      yogurt}             => {whole milk}         0.010       0.58    0.017  2.3    99
+[2]  {other vegetables,                                                               
+      butter}             => {whole milk}         0.011       0.57    0.020  2.2   113
+[3]  {other vegetables,                                                               
+      domestic eggs}      => {whole milk}         0.012       0.55    0.022  2.2   121
+[4]  {yogurt,                                                                         
+      whipped/sour cream} => {whole milk}         0.011       0.52    0.021  2.1   107
+[5]  {other vegetables,                                                               
+      whipped/sour cream} => {whole milk}         0.015       0.51    0.029  2.0   144
+[6]  {pip fruit,                                                                      
+      other vegetables}   => {whole milk}         0.014       0.52    0.026  2.0   133
+[7]  {citrus fruit,                                                                   
+      root vegetables}    => {other vegetables}   0.010       0.59    0.018  3.0   102
+[8]  {tropical fruit,                                                                 
+      root vegetables}    => {other vegetables}   0.012       0.58    0.021  3.0   121
+[9]  {tropical fruit,                                                                 
+      root vegetables}    => {whole milk}         0.012       0.57    0.021  2.2   118
+[10] {tropical fruit,                                                                 
+      yogurt}             => {whole milk}         0.015       0.52    0.029  2.0   149
+[11] {root vegetables,                                                                
+      yogurt}             => {other vegetables}   0.013       0.50    0.026  2.6   127
+[12] {root vegetables,                                                                
+      yogurt}             => {whole milk}         0.015       0.56    0.026  2.2   143
+[13] {root vegetables,                                                                
+      rolls/buns}         => {other vegetables}   0.012       0.50    0.024  2.6   120
+[14] {root vegetables,                                                                
+      rolls/buns}         => {whole milk}         0.013       0.52    0.024  2.0   125
+[15] {other vegetables,                                                               
+      yogurt}             => {whole milk}         0.022       0.51    0.043  2.0   219
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
   
   
